@@ -39,8 +39,10 @@ function HomePage() {
                     <div className="max-lg:hidden">
                         <ul className="flex font-[300] text-[20px] items-center gap-[60px]">
                             <li className="relative group">
-                                <Link to={'/themes'} onClick={sessionStorage.setItem("product_page", 1)}>
-                                    Themes
+                                <Link to={'/themes'} className="flex items-center gap-2" onClick={sessionStorage.setItem("product_page", 1)}>
+                                    Themes <svg xmlns="http://www.w3.org/2000/svg" width="12" height="7" viewBox="0 0 12 7" fill="none">
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M11.8403 0.159707C11.9426 0.262101 12 0.400899 12 0.545615C12 0.690331 11.9426 0.829129 11.8403 0.931522L6.37934 6.39248C6.27694 6.49474 6.13814 6.55219 5.99343 6.55219C5.84871 6.55219 5.70991 6.49474 5.60752 6.39248L0.146566 0.931522C0.0501038 0.828001 -0.0024111 0.69108 8.50795e-05 0.549604C0.00258126 0.408128 0.0598936 0.273143 0.159948 0.173089C0.260002 0.0730349 0.394986 0.0157227 0.536462 0.0132265C0.677938 0.0107303 0.81486 0.063245 0.918381 0.159707L5.99343 5.23476L11.0685 0.159707C11.1709 0.0574415 11.3097 0 11.4544 0C11.5991 0 11.7379 0.0574415 11.8403 0.159707Z" fill="#2E2E2E" />
+                                    </svg>
                                 </Link>
                                 <div className="absolute top-full z-[8] left-0 hidden group-hover:block bg-white shadow-[0px_4.09px_16.37px_0px_#e8e8e8] rounded-md p-2 w-40">
                                     {category?.data
@@ -169,8 +171,10 @@ function HomePage() {
                             <div className="px-[20px] mt-[30px]">
                                 <ul className=" font-[300] text-[20px]  space-y-[20px]">
                                     <li className='relative group'>
-                                        <div className="text-[16px]">
-                                            Themes
+                                        <div className="text-[16px] flex items-center gap-2">
+                                            Themes <svg xmlns="http://www.w3.org/2000/svg" width="12" height="7" viewBox="0 0 12 7" fill="none">
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M11.8403 0.159707C11.9426 0.262101 12 0.400899 12 0.545615C12 0.690331 11.9426 0.829129 11.8403 0.931522L6.37934 6.39248C6.27694 6.49474 6.13814 6.55219 5.99343 6.55219C5.84871 6.55219 5.70991 6.49474 5.60752 6.39248L0.146566 0.931522C0.0501038 0.828001 -0.0024111 0.69108 8.50795e-05 0.549604C0.00258126 0.408128 0.0598936 0.273143 0.159948 0.173089C0.260002 0.0730349 0.394986 0.0157227 0.536462 0.0132265C0.677938 0.0107303 0.81486 0.063245 0.918381 0.159707L5.99343 5.23476L11.0685 0.159707C11.1709 0.0574415 11.3097 0 11.4544 0C11.5991 0 11.7379 0.0574415 11.8403 0.159707Z" fill="#2E2E2E" />
+                                    </svg>
                                         </div>
                                         <div className="absolute top-full z-[8] left-0 hidden group-hover:block bg-white shadow-[0px_4.09px_16.37px_0px_#e8e8e8] rounded-md p-2 w-40">
                                             {category?.data
