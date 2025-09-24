@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function HomePage() {
 
-    const { data: footerCategories } = useGetCategoryQuery({fetch_all : true});
+    const { data: footerCategories } = useGetCategoryQuery({ fetch_all: true });
     const navigate = useNavigate();
     return (
         <>
@@ -49,13 +49,21 @@ function HomePage() {
                             <h4 className="text-[22px] font-[600] max-sm:text-[20px] leading-[37px] mb-[10px]">Product</h4>
 
                             <ul>
-                                {footerCategories?.data?.map((category) => (
-                                    <li key={category.category_id} className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] capitalize text-[#303538] cursor-pointer leading-[37.5px]" onClick={() => navigate('/themes', {
-                                        state: { category_id: category.category_id, name: category.name }
-                                    })}>
-                                        {category.name}
-                                    </li>
-                                ))}
+                                {footerCategories?.data
+                                    ?.filter(cat => ["Html", "Wordpress"].includes(cat.name)) // ✅ Only Html & Wordpress
+                                    .map((category) => (
+                                        <li
+                                            key={category.category_id}
+                                            className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] capitalize text-[#303538] cursor-pointer leading-[37.5px]"
+                                            onClick={() =>
+                                                navigate(`/${category.name.toLowerCase().replace(/\s+/g, '-')}`, {
+                                                    state: { category_id: category.category_id, name: category.name }
+                                                })
+                                            }
+                                        >
+                                            {category.name}
+                                        </li>
+                                    ))}
 
 
                             </ul>
@@ -65,23 +73,23 @@ function HomePage() {
 
                             <ul>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
-                                    <Link to={"/themes"}>
-                                    Themes
+                                    <Link to={"/"}>
+                                        Home
                                     </Link>
                                 </li>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
                                     <Link to={"/about_us"}>
-                                    About Us
+                                        About Us
                                     </Link>
                                 </li>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
                                     <Link to={"/blog"}>
-                                    Blog
+                                        Blog
                                     </Link>
                                 </li>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
                                     <Link to={"/contact_us"}>
-                                    Contact Us
+                                        Contact Us
                                     </Link>
                                 </li>
                                 {/* <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
@@ -95,19 +103,19 @@ function HomePage() {
 
                             <ul>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
-                                <Link to={"/privacy-policy"}>
-                                    Privacy Policy
-                                </Link>
+                                    <Link to={"/privacy-policy"}>
+                                        Privacy Policy
+                                    </Link>
                                 </li>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
-                                <Link to={"/terms-and-conditions"}>
-                                    Terms and Conditions
-                                </Link>
+                                    <Link to={"/terms-and-conditions"}>
+                                        Terms and Conditions
+                                    </Link>
                                 </li>
                                 <li className="text-[18px] max-sm:text-[16px] max-sm:leading-[32px] text-[#303538] leading-[37.5px]">
-                                <Link to={"/cancellation-and-refund-policy"}>
-                                    Cancellation and Refund Policy
-                                </Link>
+                                    <Link to={"/cancellation-and-refund-policy"}>
+                                        Cancellation and Refund Policy
+                                    </Link>
                                 </li>
 
 
@@ -115,7 +123,7 @@ function HomePage() {
                             </ul>
                         </div>
                     </div>
-                    
+
                 </div>
             </footer>
             <section className="border-t py-[21px] border-[#C2C2C2]">

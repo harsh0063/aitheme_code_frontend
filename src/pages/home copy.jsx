@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from '../component/header'
 import Footer from '../component/footer'
 import cate1 from '../assets/html.svg'
@@ -23,7 +23,7 @@ import { Helmet } from "react-helmet-async";
 function HomePage() {
   const navigate = useNavigate()
 
-  // const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [isOpen, setIsOpen] = useState(false);
 
   const categories = ["Rings", "Necklaces", "Bracelets"];
@@ -51,12 +51,11 @@ function HomePage() {
   const { data: subcategory } = useGetSubcategoryQuery({ fetch_all: true })
   const itemsPerPage = 16;
   const [currentPage, setCurrentPage] = useState(1);
-  // const queryParams = {
-  //   page_size: itemsPerPage,
-  //   page: currentPage,
-    
-  // };
-  // const { data: themes } = useGetThemesQuery(queryParams);
+  const queryParams = {
+    page_size: itemsPerPage,
+    page: currentPage,
+  };
+  const { data: themes } = useGetThemesQuery(queryParams);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const filters = ['All Templates', 'HTML', 'React', 'Vue', 'Tailwind'];
@@ -132,41 +131,7 @@ function HomePage() {
       });
     }
   }, []);
-  
-  const [selected, setSelected] = useState('All');
-    const queryParams = useMemo(() => {
-      
-  
-      const sortFlags = {
-        'Featured': { is_featured: true },
-        'Bestsellers': { is_best_seller: true },
-        'Trending': { is_trending: true },
-        'New Arrivals': {is_new_arrival : true}, // handle this if needed
-      };
-  
-      return {
-        page_size: itemsPerPage,
-        page: currentPage,
-        ...sortFlags[selected],
-      };
-    }, [ selected,  itemsPerPage, currentPage]);
 
-
-    const { data: themes } = useGetThemesQuery(queryParams);
-  
-    const filteredTemplates = themes?.data
-  
-    const totalPages = themes?.total_pages
-  
-  
-    const [open, setOpen] = useState(false);
-   useEffect(() => {
-      const sortBy = location?.state?.sort_by;
-      if (sortBy && options.includes(sortBy)) {
-        setSelected(sortBy);
-      }
-    }, [location?.state?.sort_by]);
-    const options = ['All','Bestsellers', 'Trending', 'Featured', 'New Arrivals'];
   return (
     <>
       <Helmet>
@@ -382,7 +347,7 @@ function HomePage() {
         </div>
       </section > */}
 
-      {/* <section className="pt-[70px]">
+      <section className="pt-[70px]">
         <div className="container">
           <h2 className="pop mb-[20px] font-medium text-[25px] leading-[54px] text-[#243238]">Recent view product</h2>
 
@@ -696,150 +661,8 @@ function HomePage() {
 
 
         </div>
-      </section> */}
-
-      <section className="" id="specification">
-        <div className="container">
-
-          <div className="flex mb-[30px] flex-wrap gap-3 items-center justify-between">
-            <h3 className="inter font-[600] text-[#303538] text-[24px]">All Products</h3>
-            <div className="relative inline-block">
-              <button
-                onClick={() => setOpen(!open)}
-                className="flex flex-wrap items-center justify-between min-w-[180px] px-[19px] py-[8px] border border-[#757575] rounded-[12px] text-[18px] font-[400] text-[#3b3b3b] hover:border-gray-600 transition-all"
-              >
-                <span className="flex items-center gap-3">
-                  <span className="text-[#868686] inter ">Sort By :</span>
-                  <span className="text-[#333] font-medium">{selected}</span>
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" className={`transition-transform ms-[20px] ${open ? 'rotate-180' : ''}`} width="13" height="8" viewBox="0 0 13 8" fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M0.247561 0.684156C0.40628 0.525635 0.62143 0.436594 0.845753 0.436594C1.07008 0.436594 1.28523 0.525635 1.44394 0.684156L6.48907 5.72928L11.5342 0.684156C11.6117 0.600988 11.7051 0.534281 11.809 0.488015C11.9128 0.441749 12.0249 0.416871 12.1386 0.414866C12.2522 0.41286 12.3651 0.433769 12.4705 0.476343C12.5759 0.518917 12.6717 0.582286 12.7521 0.662668C12.8324 0.74305 12.8958 0.838798 12.9384 0.944202C12.981 1.04961 13.0019 1.1625 12.9999 1.27616C12.9979 1.38982 12.973 1.50192 12.9267 1.60575C12.8805 1.70959 12.8137 1.80304 12.7306 1.88054L7.08726 7.52386C6.92854 7.68238 6.71339 7.77142 6.48907 7.77142C6.26475 7.77142 6.0496 7.68238 5.89088 7.52386L0.247561 1.88054C0.0890396 1.72182 0 1.50667 0 1.28235C0 1.05802 0.0890396 0.842875 0.247561 0.684156Z" fill="#303538" />
-                </svg>
-              </button>
-
-              {open && (
-                <ul className="absolute mt-2 w-full bg-white border border-gray-300 rounded-[10px] shadow-lg z-10">
-                  {options.map((option, index) => (
-                    <li
-                      key={index}
-                      onClick={() => {
-                        setSelected(option);
-                        setOpen(false);
-                      }}
-                      className={`px-5 py-3 cursor-pointer text-[17px] hover:bg-gray-100 ${selected === option ? 'bg-gray-100 font-semibold' : ''
-                        }`}
-                    >
-                      {option}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-
-
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
-
-            {filteredTemplates?.map((val) => (
-
-              <Product
-                theme_id={val?.theme_id}
-                key={val?.theme_id}
-                image={val?.thumbnail}
-                name={val?.name}
-                slug={val?.slug}
-                discount_price={val?.price}
-                category={val?.category}
-                subcategory={val?.subcategory}
-                categoryName={category?.data?.find(cat => cat.category_id === val.category)?.name.toLowerCase().replace(/\s+/g, '-')}
-                subcategoryName={subcategory?.data?.find(sub => sub.subcategory_id == val.subcategory)?.slug}
-                rating={val?.rating}
-                sales_count={val?.sales_count}
-                demo_url={val?.demo_url}
-                product_page={currentPage}
-              />
-            ))}
-
-          </div>
-        </div>
       </section>
-      {
-        themes && (
 
-          <div className="pagination max-sm:gap-0 flex items-center justify-center mt-8 gap-2 flex-wrap">
-
-
-            <div
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              className={`border-[#E2E9EE] flex border-[2.4px] rounded-[3.6px] items-center py-[13px] px-[15.6px] cursor-pointer
-      max-sm:px-[5px] max-lg:py-[10px] max-lg:px-[10px] max-sm:py-[5px] mr-[14px] 
-      ${currentPage === 1 ? 'opacity-50 pointer-events-none' : ''}`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="18" viewBox="0 0 13 18" fill="none">
-                <g clipPath="url(#clip0_125_4399)">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M9.70627 17.7469L0.912109 9.01825L9.70627 0.289551L11.999 2.5692L5.49613 9.01825L11.999 15.4673L9.70627 17.7469Z" fill="#6E777D" />
-                </g>
-                <defs>
-                  <clipPath id="clip0_125_4399">
-                    <rect width="11.6383" height="17.4574" fill="white" transform="translate(0.912109 0.289551)" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div>
-
-            {/* Smart page numbers */}
-            {Array.from({ length: totalPages }, (_, index) => index + 1)
-              .filter(number => (
-                number === 1 ||
-                number === totalPages ||
-                (number >= currentPage - 1 && number <= currentPage + 1)
-              ))
-              .reduce((acc, number, idx, array) => {
-                if (idx > 0 && number - array[idx - 1] > 1) {
-                  acc.push('ellipsis');
-                }
-                acc.push(number);
-                return acc;
-              }, [])
-              .map((item, index) => (
-                item === 'ellipsis' ? (
-                  <span key={`ellipsis-${index}`} className="px-2">...</span>
-                ) : (
-                  <button
-                    key={item}
-                    onClick={() => setCurrentPage(item)}
-                    className={`Inter cursor-pointer ${currentPage === item ? 'active text-[#303538] bg-[#538DF833] rounded-[4px]' : 'bg-transparent'
-                      } max-lg:py-[0px] max-lg:text-[16px] max-lg:h-[34px] max-lg:px-[15px] max-sm:h-[24px] max-sm:text-[12px] max-sm:px-[10px] flex justify-center items-center px-[16px] py-2`}
-                  >
-                    {item}
-                  </button>
-                )
-              ))}
-
-
-            {/* Next button */}
-            <div
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              className={`border-[#E2E9EE] flex border-[2.4px] rounded-[3.6px] items-center py-[13px] px-[15.6px] cursor-pointer
-      max-sm:px-[5px] max-lg:py-[5px] max-lg:px-[5px] max-sm:py-[5px] ml-[14px]
-      ${currentPage === totalPages ? 'opacity-50 pointer-events-none' : ''}`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="18" viewBox="0 0 13 18" fill="none">
-                <g clipPath="url(#clip0_125_4415)">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M2.72183 17.7469L11.4767 9.02261L2.72183 0.289551L0.449463 2.5692L6.91597 9.02261L0.449463 15.4746L2.72183 17.7469Z" fill="#303538" />
-                </g>
-                <defs>
-                  <clipPath id="clip0_125_4415">
-                    <rect width="11.6383" height="17.4574" fill="white" transform="translate(0.449463 0.289551)" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div>
-
-          </div>
-
-        )
-      }
       <Footer />
     </>
   );

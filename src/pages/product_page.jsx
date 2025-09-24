@@ -366,7 +366,7 @@ function HomePage() {
 
 
           </div> */}
-          <div className="mt-[30px] max-w-[1152px] max-lg:w-[80%] mx-auto ">
+          {/* <div className="mt-[30px] max-w-[1152px] max-lg:w-[80%] mx-auto ">
             {isCategoryLoading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 max-sm:gap-[30px] max-md:gap-[40px] max-lg:gap-[45px] gap-[60px]">
                 {Array(6)
@@ -406,7 +406,7 @@ function HomePage() {
                 ))}
               </div>
             )}
-          </div>
+          </div> */}
 
         </div>
       </section >

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from '../assets/logo.svg'
 import download from '../assets/download.svg'
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useGetCartQuery, useGetWhishlistQuery } from "../service/apislice";
+import { useGetCartQuery, useGetCategoryQuery, useGetWhishlistQuery } from "../service/apislice";
 
 function HomePage() {
     const navigate = useNavigate()
@@ -11,7 +11,12 @@ function HomePage() {
     useEffect(() => {
         window.scrollTo(0, 0); // Scrolls to the top when the route changes
     }, [pathname]);
-
+    const { data: category, isLoading: isCategoryLoading } = useGetCategoryQuery({ fetch_all: true },
+        {
+            keepUnusedDataFor: 300,
+            refetchOnMountOrArgChange: false,
+        })
+    console.log(category);
 
     const { data: cartcount } = useGetCartQuery(undefined, {
         skip: !localStorage.getItem('aithemetoken')
@@ -33,10 +38,29 @@ function HomePage() {
                     </div>
                     <div className="max-lg:hidden">
                         <ul className="flex font-[300] text-[20px] items-center gap-[60px]">
-                            <li className=" ">
-                                <Link to={'/themes'} onClick={sessionStorage.setItem("product_page",1)}>
+                            <li className="relative group">
+                                <Link to={'/themes'} onClick={sessionStorage.setItem("product_page", 1)}>
                                     Themes
                                 </Link>
+                                <div className="absolute top-full z-[8] left-0 hidden group-hover:block bg-white shadow-[0px_4.09px_16.37px_0px_#e8e8e8] rounded-md p-2 w-40">
+                                    {category?.data
+                                        ?.filter(cat => ["Html", "Wordpress"].includes(cat.name)) // ✅ Only Html & Wordpress
+                                        .map((cat, index) => (
+                                            <div
+                                                key={index}
+                                                to="/Products"
+                                                className="block cursor-pointer px-3 py-2 hover:bg-gray-100"
+                                                onClick={() =>
+                                                    navigate(`/${cat.name.toLowerCase().replace(/\s+/g, '-')}`, {
+                                                        state: { category_id: cat.category_id, name: cat.name },
+                                                    })
+                                                }
+                                            >
+                                                {cat.name}
+                                            </div>
+                                        ))}
+                                </div>
+
                             </li>
                             <li className=" ">
                                 <Link to={'/about_us'}>
@@ -60,7 +84,7 @@ function HomePage() {
                             {/*  <li>
                                 <button className="h-[37px] font-[300] py-0 w-[160px] rounded-[3px] bg-transparent border-1 border-[#000000]">Free Downloads</button>
                             </li>*/}
-                            <li>
+                            {/* <li>
                                 <button className="w-[100px]  justify-center text-white py-0 h-[37px] flex rounded-[3px] gap-[12px] font-[300] items-center bg-[#F44336] " onClick={() => navigate('/sales')}>
                                     <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -68,7 +92,7 @@ function HomePage() {
                                             <path d="M8.12519 8.75124C7.09147 8.75124 6.25024 7.91002 6.25024 6.8763C6.25024 5.84258 7.09147 5.00135 8.12519 5.00135C9.15891 5.00135 10.0001 5.84258 10.0001 6.8763C10.0001 7.91002 9.15891 8.75124 8.12519 8.75124ZM8.12519 6.25132C7.7802 6.25132 7.50021 6.53131 7.50021 6.8763C7.50021 7.22129 7.7802 7.50128 8.12519 7.50128C8.47018 7.50128 8.75017 7.22129 8.75017 6.8763C8.75017 6.53131 8.47018 6.25132 8.12519 6.25132ZM11.8751 15.0011C10.8414 15.0011 10.0001 14.1598 10.0001 13.1261C10.0001 12.0924 10.8414 11.2512 11.8751 11.2512C12.9088 11.2512 13.75 12.0924 13.75 13.1261C13.75 14.1598 12.9088 15.0011 11.8751 15.0011ZM11.8751 12.5011C11.5313 12.5011 11.2501 12.7824 11.2501 13.1261C11.2501 13.4699 11.5313 13.7511 11.8751 13.7511C12.2188 13.7511 12.5001 13.4699 12.5001 13.1261C12.5001 12.7824 12.2188 12.5011 11.8751 12.5011ZM6.87523 15.0011C6.74898 15.0011 6.62273 14.9636 6.51274 14.8848C6.23149 14.6836 6.1665 14.2936 6.36774 14.0123L12.6176 5.2626C12.8188 4.98135 13.2088 4.91636 13.49 5.1176C13.7713 5.31759 13.835 5.70883 13.635 5.98882L7.38521 14.7386C7.26146 14.9098 7.07022 15.0011 6.87523 15.0011Z" fill="#F44336" />
                                         </svg>
                                     </div>  Sale</button>
-                            </li>
+                            </li> */}
                         </ul>
 
                         <ul className="flex gap-[30px] max-sm:gap-[15px] items-center ">
@@ -144,27 +168,47 @@ function HomePage() {
                             </div>
                             <div className="px-[20px] mt-[30px]">
                                 <ul className=" font-[300] text-[20px]  space-y-[20px]">
-                                    <li className=" ">
-                                        <Link to={'/themes'} onClick={sessionStorage.setItem("product_page",1)}>
+                                    <li className='relative group'>
+                                        <div className="text-[16px]">
                                             Themes
-                                        </Link>
+                                        </div>
+                                        <div className="absolute top-full z-[8] left-0 hidden group-hover:block bg-white shadow-[0px_4.09px_16.37px_0px_#e8e8e8] rounded-md p-2 w-40">
+                                            {category?.data
+                                                ?.filter(cat => ["Html", "Wordpress"].includes(cat.name)) // ✅ Only Html & Wordpress
+                                                .map((cat, index) => (
+                                                    <div
+                                                        key={index}
+                                                        to="/Products"
+                                                        className="block text-sm cursor-pointer px-3 py-2 hover:bg-gray-100"
+                                                        onClick={() => {
+                                                            setIsOpen(false)
+                                                            navigate(`/${cat.name.toLowerCase().replace(/\s+/g, '-')}`, {
+                                                                state: { category_id: cat.category_id, name: cat.name },
+                                                            })
+                                                        }
+                                                        }
+                                                    >
+                                                        {cat.name}
+                                                    </div>
+                                                ))}
+                                        </div>
                                     </li>
                                     <li className=" ">
-                                        <Link to={'/about_us'}>
+                                        <Link to={'/about_us'} onClick={() => setIsOpen(false)} className="text-[16px]">
                                             About Us
                                         </Link>
                                     </li>
                                     <li className=" ">
-                                        <Link to={'/blog'}>
+                                        <Link to={'/blog'} onClick={() => setIsOpen(false)} className="text-[16px]">
                                             Blog
                                         </Link>
                                     </li>
                                     <li className=" ">
-                                        <Link to={'/contact_us'}>
+                                        <Link to={'/contact_us'} onClick={() => setIsOpen(false)} className="text-[16px]">
                                             Contact Us
                                         </Link>
                                     </li>
-                                    <li className=" ">
+                                    {/* <li className=" ">
                                         <button className="w-[130px] justify-center text-white py-0 h-[37px] flex rounded-[3px] gap-[12px] font-[300] items-center bg-[#F44336] " onClick={() => navigate('/sales')}>
                                             <div>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -172,7 +216,7 @@ function HomePage() {
                                                     <path d="M8.12519 8.75124C7.09147 8.75124 6.25024 7.91002 6.25024 6.8763C6.25024 5.84258 7.09147 5.00135 8.12519 5.00135C9.15891 5.00135 10.0001 5.84258 10.0001 6.8763C10.0001 7.91002 9.15891 8.75124 8.12519 8.75124ZM8.12519 6.25132C7.7802 6.25132 7.50021 6.53131 7.50021 6.8763C7.50021 7.22129 7.7802 7.50128 8.12519 7.50128C8.47018 7.50128 8.75017 7.22129 8.75017 6.8763C8.75017 6.53131 8.47018 6.25132 8.12519 6.25132ZM11.8751 15.0011C10.8414 15.0011 10.0001 14.1598 10.0001 13.1261C10.0001 12.0924 10.8414 11.2512 11.8751 11.2512C12.9088 11.2512 13.75 12.0924 13.75 13.1261C13.75 14.1598 12.9088 15.0011 11.8751 15.0011ZM11.8751 12.5011C11.5313 12.5011 11.2501 12.7824 11.2501 13.1261C11.2501 13.4699 11.5313 13.7511 11.8751 13.7511C12.2188 13.7511 12.5001 13.4699 12.5001 13.1261C12.5001 12.7824 12.2188 12.5011 11.8751 12.5011ZM6.87523 15.0011C6.74898 15.0011 6.62273 14.9636 6.51274 14.8848C6.23149 14.6836 6.1665 14.2936 6.36774 14.0123L12.6176 5.2626C12.8188 4.98135 13.2088 4.91636 13.49 5.1176C13.7713 5.31759 13.835 5.70883 13.635 5.98882L7.38521 14.7386C7.26146 14.9098 7.07022 15.0011 6.87523 15.0011Z" fill="#F44336" />
                                                 </svg>
                                             </div>  Sale</button>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </div>
