@@ -47,12 +47,17 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
             await addWishlist(formdata).unwrap()
             // toast.success('Item successfully whishlist')
 
-            navigate('/whishlist')
+            navigate('/wishlist')
 
         } catch (error) {
-            toast.error(error?.message || error?.data?.message || 'Failed to add whishlist', {
-                autoClose: 1000,
-            });
+            if(localStorage.getItem('aithemetoken')){
+                toast.error(error?.message || error?.data?.message || 'Failed to add to cart', {
+                    autoClose: 1000,
+                });
+
+            }else{
+                navigate('/login')
+            }
         }
     }
 
@@ -93,7 +98,7 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
 
     return (
         <>
-
+           
             <div className=" rounded-[10px] overflow-hidden bg-white shadow-[0px_4px_10px_0px_#00000026]">
                 <div className="">
                     <img onClick={() => {
@@ -172,6 +177,7 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
                     </div>
 
                     <button onClick={() => window.open(demo_url, "_blank")} className="h-[30px] cursor-pointer hover:border-[#538DF8] w-full py-0 text-sm font-[600] inter border border-[#538DF8] rounded-[3px] bg-transparent transition-all duration-150 hover:text-white hover:bg-[#538DF8] text-[#538DF8]">Live Demo</button>
+                    <button onClick={() => window.open(demo_url, "_blank")} className="h-[30px] shadow-[0px_1px_0px_0px_#6F9A36] cursor-pointer  mt-[10px] hover:border-[#82B440] pop w-full py-0 text-sm font-[500] inter border border-[#82B440] rounded-[3px] bg-[#82B440] transition-all duration-150   text-white">Buy Now</button>
 
                 </div>
             </div>

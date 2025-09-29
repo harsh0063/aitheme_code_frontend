@@ -702,7 +702,7 @@ function HomePage() {
         <div className="container">
 
           <div className="flex mb-[30px] flex-wrap gap-3 items-center justify-between">
-            <h3 className="inter font-[600] text-[#303538] text-[24px]">All Products</h3>
+            <h3 className="inter font-[600] text-[#303538] text-[24px]">All Theme </h3>
             <div className="relative inline-block">
               <button
                 onClick={() => setOpen(!open)}

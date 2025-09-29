@@ -37,21 +37,21 @@ function HomePage() {
                         <img src={download} onClick={() => navigate('/')} className="cursor-pointer w-[30px] sm:hidden" alt="" />
                     </div>
                     <div className="max-lg:hidden">
-                        <ul className="flex font-[300] text-[20px] items-center gap-[60px]">
+                        <ul className="flex font-[300] max-xl:gap-[40px] text-[20px] items-center gap-[60px]">
                             <li className="relative group">
-                                <Link to={'/themes'} className="flex items-center gap-2" onClick={sessionStorage.setItem("product_page", 1)}>
+                                <Link to={'/themes'} className="flex items-center gap-2 max-xl:text-[16px]" onClick={sessionStorage.setItem("product_page", 1)}>
                                     Themes <svg xmlns="http://www.w3.org/2000/svg" width="12" height="7" viewBox="0 0 12 7" fill="none">
                                         <path fillRule="evenodd" clipRule="evenodd" d="M11.8403 0.159707C11.9426 0.262101 12 0.400899 12 0.545615C12 0.690331 11.9426 0.829129 11.8403 0.931522L6.37934 6.39248C6.27694 6.49474 6.13814 6.55219 5.99343 6.55219C5.84871 6.55219 5.70991 6.49474 5.60752 6.39248L0.146566 0.931522C0.0501038 0.828001 -0.0024111 0.69108 8.50795e-05 0.549604C0.00258126 0.408128 0.0598936 0.273143 0.159948 0.173089C0.260002 0.0730349 0.394986 0.0157227 0.536462 0.0132265C0.677938 0.0107303 0.81486 0.063245 0.918381 0.159707L5.99343 5.23476L11.0685 0.159707C11.1709 0.0574415 11.3097 0 11.4544 0C11.5991 0 11.7379 0.0574415 11.8403 0.159707Z" fill="#2E2E2E" />
                                     </svg>
                                 </Link>
-                                <div className="absolute top-full z-[8] left-0 hidden group-hover:block bg-white shadow-[0px_4.09px_16.37px_0px_#e8e8e8] rounded-md p-2 w-40">
+                                <div className="absolute top-full z-[8] max-xl:py-2 left-0 hidden group-hover:block bg-white shadow-[0px_4.09px_16.37px_0px_#e8e8e8] rounded-md p-2 w-40">
                                     {category?.data
                                         ?.filter(cat => ["Html", "Wordpress"].includes(cat.name)) // ✅ Only Html & Wordpress
                                         .map((cat, index) => (
                                             <div
                                                 key={index}
                                                 to="/Products"
-                                                className="block cursor-pointer px-3 py-2 hover:bg-gray-100"
+                                                className="block max-xl:text-sm text-[16px] cursor-pointer px-3 py-2 hover:bg-gray-100"
                                                 onClick={() =>
                                                     navigate(`/${cat.name.toLowerCase().replace(/\s+/g, '-')}`, {
                                                         state: { category_id: cat.category_id, name: cat.name },
@@ -65,27 +65,27 @@ function HomePage() {
 
                             </li>
                             <li className=" ">
-                                <Link to={'/about_us'}>
+                                <Link to={'/about_us'} className="max-xl:text-[16px]">
                                     About Us
                                 </Link>
                             </li>
                             <li className=" ">
-                                <Link to={'/blog'}>
+                                <Link to={'/blog'} className="max-xl:text-[16px]">
                                     Blog
                                 </Link>
                             </li>
                             <li className=" ">
-                                <Link to={'/contact_us'}>
+                                <Link to={'/contact_us'} className="max-xl:text-[16px]">
                                     Contact Us
                                 </Link>
                             </li>
                         </ul>
                     </div>
                     <div className="flex max-sm:gap-[20px] gap-[30px]">
-                        <ul className="flex gap-[20px] max-sm:hidden">
-                            {/*  <li>
-                                <button className="h-[37px] font-[300] py-0 w-[160px] rounded-[3px] bg-transparent border-1 border-[#000000]">Free Downloads</button>
-                            </li>*/}
+                        <ul className="flex gap-[20px] max-lg:hidden">
+                             <li>
+                                <button className="h-[37px] max-xl:w-[120px] max-xl:text-[14px] max-xl:h-[30px] hover:bg-black hover:text-white transition-all duration-250 font-[400] py-0 w-[160px] rounded-[3px] bg-transparent border border-[#000000]">Free Downloads</button>
+                            </li>
                             {/* <li>
                                 <button className="w-[100px]  justify-center text-white py-0 h-[37px] flex rounded-[3px] gap-[12px] font-[300] items-center bg-[#F44336] " onClick={() => navigate('/sales')}>
                                     <div>
@@ -211,6 +211,9 @@ function HomePage() {
                                         <Link to={'/contact_us'} onClick={() => setIsOpen(false)} className="text-[16px]">
                                             Contact Us
                                         </Link>
+                                    </li>
+                                    <li className=" ">
+ <button className="  text-[13px] font-[400] hover:bg-black hover:text-white transition-all duration-250 py-0 w-[120px] h-[30px] rounded-[3px] bg-transparent border border-[#000000]">Free Downloads</button>
                                     </li>
                                     {/* <li className=" ">
                                         <button className="w-[130px] justify-center text-white py-0 h-[37px] flex rounded-[3px] gap-[12px] font-[300] items-center bg-[#F44336] " onClick={() => navigate('/sales')}>

@@ -21,6 +21,8 @@ import NotFound from './pages/404error';
 import Cancellation_and  from './pages/Cancellation-and-Refund-Policy';
 import Terms_and_Conditions  from './pages/Terms-and-Conditions';
 import Privacy_policy  from './pages/Privacy-policy';
+import Checkout_page  from './pages/checkout_page';
+import Billing_details  from './pages/billing_details';
 
 
 const App = () => {
@@ -30,7 +32,7 @@ const App = () => {
     return (
         <>
             <InjectHeadScripts />
-            <ToastContainer />
+            <ToastContainer autoClose={1500} />
             <BrowserRouter basename='/'>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -52,6 +54,8 @@ const App = () => {
                     <Route path="/cancellation-and-refund-policy" element={<Cancellation_and />} />
                     <Route path="/terms-and-conditions" element={<Terms_and_Conditions />} />
                     <Route path="/privacy-policy" element={<Privacy_policy />} />
+                    <Route path="/checkout_page" element={<Checkout_page />} />
+                    <Route path="/billing_details" element={<Billing_details />} />
 
                 </Routes>
             </BrowserRouter>

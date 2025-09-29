@@ -17,7 +17,7 @@ import sub5 from '../assets/subcate5.png'
 import Product from '../component/product'
 import { useAddWishlistMutation, useDeleteWishlistMutation, useGetCategoryQuery, useGetThemesQuery, useGetWhishlistQuery, useAddCartMutation, useGetSubcategoryQuery, useGetRatingQuery } from "../service/apislice";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import { Helmet } from 'react-helmet-async';
 
@@ -197,9 +197,15 @@ function HomePage() {
       navigate('/cart')
 
     } catch (error) {
-      toast.error(error?.message || error?.data?.message || 'failed to add to cart', {
+    
+       if(localStorage.getItem('aithemetoken')){
+                      toast.error(error?.message || error?.data?.message || 'failed to add to cart', {
         autoClose: 1000,
       });
+      
+                  }else{
+                      navigate('/login')
+                  }
     }
   }
   // const handlecart = async () => {
@@ -261,7 +267,7 @@ function HomePage() {
 
         <link rel="canonical" href={`https://aithemecode.com/${location.pathname}`} />
       </Helmet>
-
+    <ToastContainer/>
       <Header />
       <section className="pt-[50px] pb-[40px] pop">
         <div className=" max-w-[1380px] px-[12px] mx-auto">

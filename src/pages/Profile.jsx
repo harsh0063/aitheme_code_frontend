@@ -42,7 +42,7 @@ const profile = () => {
     }, [active]);
 
     const { data: user } = useGetUserQuery()
-  
+
 
     const [data, setdata] = useState({
         first_name: '',
@@ -150,7 +150,7 @@ const profile = () => {
 
     const { data: order } = useGetOrderQuery({ fetch_all: true })
 
-   
+
 
     const [orderitem, setorderitem] = useState('')
 
@@ -551,8 +551,8 @@ const profile = () => {
                                                 <path d="M9.55677 14.5647L2.55273 7.9109L9.55677 1.25706" stroke="#d86a37" strokeWidth="2.80161" />
                                             </svg>Back</h2>
 
-                                        <div className='flex gap-6 w-full'>
-                                            <div className='border-[1px] w-[70%] border-[#CBD6E2] rounded-[15px] p-[20px]'>
+                                        <div className='flex max-md:flex-col  gap-6 w-full'>
+                                            <div className='border-[1px] w-[70%] max-md:w-full border-[#CBD6E2] rounded-[15px] p-[20px]'>
                                                 <div className="text-[15px] font-bold mb-[15px] max-sm:mb-[10px] "><h5>Order Item</h5></div>
                                                 <div className='divide-y divide-[#d4cdf0]'>
                                                     {Array.isArray(orderitem?.order_items) && orderitem?.order_items?.map((val, index) => {
@@ -578,22 +578,32 @@ const profile = () => {
                                                                 </div>
 
 
-                                                                <div className="">
-                                                                    <span className="text-[12px] text-[#595858] max-md:text-[9px] "></span>
-                                                                    <h4 className="text-[14px] text-center font-[600] max-md:text-[11px]">{val.quantity}</h4>
-                                                                </div>
 
 
-                                                                <div className="">
-                                                                    <span className="text-[12px] text-[#595858] max-md:text-[9px] ">Price</span>
-                                                                    <h4 className="text-[14px] font-[600] max-md:text-[11px]">₹{parseInt(matchedProduct.discount_price)}</h4>
+
+                                                                <div className="flex items-center ps-4 gap-[30px] pe-2">
+                                                                    <div className="">
+                                                                        <span className="text-[12px] text-[#595858] max-md:text-[9px] ">Price</span>
+                                                                        <h4 className="text-[14px] font-[600] max-md:text-[11px]">₹{parseInt(matchedProduct.discount_price)}</h4>
+                                                                    </div>
+
+
+                                                                    <a
+                                                                        href={import.meta.env.VITE_API_BASE_URL + matchedProduct.theme_file}
+                                                                        download
+                                                                        className="inline-block"
+                                                                    >
+
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" className='w-[20px]' x="0" y="0" viewBox="0 0 515.283 515.283" xml:space="preserve"><g><path d="M400.775 515.283H114.507c-30.584 0-59.339-11.911-80.968-33.54C11.911 460.117 0 431.361 0 400.775v-28.628c0-15.811 12.816-28.628 28.627-28.628s28.627 12.817 28.627 28.628v28.628c0 15.293 5.956 29.67 16.768 40.483 10.815 10.814 25.192 16.771 40.485 16.771h286.268c15.292 0 29.669-5.957 40.483-16.771 10.814-10.815 16.771-25.192 16.771-40.483v-28.628c0-15.811 12.816-28.628 28.626-28.628s28.628 12.817 28.628 28.628v28.628c0 30.584-11.911 59.338-33.54 80.968-21.629 21.629-50.384 33.54-80.968 33.54zM257.641 400.774a28.538 28.538 0 0 1-19.998-8.142l-.002-.002-.057-.056-.016-.016c-.016-.014-.03-.029-.045-.044l-.029-.029a.892.892 0 0 0-.032-.031l-.062-.062-114.508-114.509c-11.179-11.179-11.179-29.305 0-40.485 11.179-11.179 29.306-11.18 40.485 0l65.638 65.638V28.627C229.014 12.816 241.83 0 257.641 0s28.628 12.816 28.628 28.627v274.408l65.637-65.637c11.178-11.179 29.307-11.179 40.485 0 11.179 11.179 11.179 29.306 0 40.485L277.883 392.39l-.062.062-.032.031-.029.029c-.014.016-.03.03-.044.044l-.017.016a1.479 1.479 0 0 1-.056.056l-.002.002c-.315.307-.634.605-.96.895a28.441 28.441 0 0 1-7.89 4.995l-.028.012c-.011.004-.02.01-.031.013a28.5 28.5 0 0 1-11.091 2.229z" fill="#000000" opacity="1" data-original="#000000"></path></g></svg>
+                                                                    </a>
+
                                                                 </div>
                                                             </div>
                                                         );
                                                     })}
                                                 </div>
                                             </div>
-                                            <div className='w-[30%] flex flex-col gap-6'>
+                                            <div className='w-[30%] max-md:w-full flex flex-col gap-6'>
                                                 <div className='border-[1px]  border-[#CBD6E2] rounded-[15px] p-[20px]'>
                                                     <div className="text-[15px] font-bold mb-[5px]  ">
                                                         <h5>Summary</h5>
@@ -605,7 +615,7 @@ const profile = () => {
                                                         </div>
                                                         <div className="text-[15px] font-bold max-sm:mb-[10px] pt-3 flex  ">
                                                             <span className="w-[150px] font-[400] text-[#575864]">Date</span>
-                                                            <span className=" font-[600] ">{formatDate(orderitem?.created_at)}</span>
+                                                            <span className=" font-[600] whitespace-nowrap">{formatDate(orderitem?.created_at)}</span>
                                                         </div>
                                                         <div className="text-[15px] font-bold max-sm:mb-[10px] pt-3 flex  ">
                                                             <span className="w-[150px] font-[400] text-[#575864]">Total </span>
