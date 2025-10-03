@@ -87,6 +87,7 @@ const ShopWishlist = () => {
                                             {/* Price */}
                                             <td className="text-center">
                                                 <span className="text-[16px] max-sm:text-sm text-nowrap font-[500] text-[#24262B]">
+                                                    
                                                     {val.theme_price ? `$${val.theme_price}` : "$0.00"}
                                                 </span>
                                             </td>

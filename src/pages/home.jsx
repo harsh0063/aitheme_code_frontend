@@ -64,23 +64,23 @@ function HomePage() {
   const [search, setsearch] = useState('')
 
   const { data: serchtheme } = useGetThemesQuery({ search: search })
-  const categoryImages = {
-    "html": cate1,
-    "bootstrap": cate2,
-    "laravel": cate3,
-    "php": cate4,
-    "react": cate5,
-    "shopify": cate6,
-    "wordpress": cate7,
-  };
-  const [arrival_id, setArrivalId] = useState(null);
+  // const categoryImages = {
+  //   "html": cate1,
+  //   "bootstrap": cate2,
+  //   "laravel": cate3,
+  //   "php": cate4,
+  //   "react": cate5,
+  //   "shopify": cate6,
+  //   "wordpress": cate7,
+  // };
+  // const [arrival_id, setArrivalId] = useState(null);
 
-  const categoryName = category?.data?.find(cat => cat.category_id === category)?.name.toLowerCase().replace(/\s+/g, '-');
-  const { data: themes_sales } = useGetThemesQuery({ is_sale: true });
-  const { data: themes_trending } = useGetThemesQuery({ is_trending: true });
-  const { data: themes_best_sellers } = useGetThemesQuery({ is_best_seller: true });
-  const { data: themes_featured } = useGetThemesQuery({ is_featured: true });
-  const { data: themes_arrivals } = useGetThemesQuery({ is_new_arrival: true, category_id: arrival_id });
+  // const categoryName = category?.data?.find(cat => cat.category_id === category)?.name.toLowerCase().replace(/\s+/g, '-');
+  // const { data: themes_sales } = useGetThemesQuery({ is_sale: true });
+  // const { data: themes_trending } = useGetThemesQuery({ is_trending: true });
+  // const { data: themes_best_sellers } = useGetThemesQuery({ is_best_seller: true });
+  // const { data: themes_featured } = useGetThemesQuery({ is_featured: true });
+  // const { data: themes_arrivals } = useGetThemesQuery({ is_new_arrival: true, category_id: arrival_id });
 
   useEffect(() => {
     if (window.particlesJS) {
@@ -745,7 +745,9 @@ function HomePage() {
               <Product
                 theme_id={val?.theme_id}
                 key={val?.theme_id}
+                is_free={val?.is_free}
                 image={val?.thumbnail}
+                theme_file={val?.theme_file}
                 name={val?.name}
                 slug={val?.slug}
                 discount_price={val?.price}

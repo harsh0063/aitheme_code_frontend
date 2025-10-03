@@ -23,6 +23,7 @@ import Terms_and_Conditions  from './pages/Terms-and-Conditions';
 import Privacy_policy  from './pages/Privacy-policy';
 import Checkout_page  from './pages/checkout_page';
 import Billing_details  from './pages/billing_details';
+import Free_themes  from './pages/free_themes';
 
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
                     <Route path="/privacy-policy" element={<Privacy_policy />} />
                     <Route path="/checkout_page" element={<Checkout_page />} />
                     <Route path="/billing_details" element={<Billing_details />} />
+                    <Route path="/free_download" element={<Free_themes />} />
 
                 </Routes>
             </BrowserRouter>

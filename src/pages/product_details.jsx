@@ -34,7 +34,7 @@ function HomePage() {
   const { data: category } = useGetCategoryQuery()
   const { data: subcategory } = useGetSubcategoryQuery({ fetch_all: true })
 
-  const { data: theme11 } = useGetThemesQuery({fetch_all: true })
+  const { data: theme11 } = useGetThemesQuery({ fetch_all: true })
 
 
   const [the__id, setThe__id] = useState(null);
@@ -197,15 +197,15 @@ function HomePage() {
       navigate('/cart')
 
     } catch (error) {
-    
-       if(localStorage.getItem('aithemetoken')){
-                      toast.error(error?.message || error?.data?.message || 'failed to add to cart', {
-        autoClose: 1000,
-      });
-      
-                  }else{
-                      navigate('/login')
-                  }
+
+      if (localStorage.getItem('aithemetoken')) {
+        toast.error(error?.message || error?.data?.message || 'failed to add to cart', {
+          autoClose: 1000,
+        });
+
+      } else {
+        navigate('/login')
+      }
     }
   }
   // const handlecart = async () => {
@@ -267,7 +267,7 @@ function HomePage() {
 
         <link rel="canonical" href={`https://aithemecode.com/${location.pathname}`} />
       </Helmet>
-    <ToastContainer/>
+      <ToastContainer />
       <Header />
       <section className="pt-[50px] pb-[40px] pop">
         <div className=" max-w-[1380px] px-[12px] mx-auto">
@@ -486,7 +486,15 @@ function HomePage() {
                   <div className="flex items-center border-b border-[#D8D8D8] justify-between">
 
                     <h3 className="text-[18px] max-sm:text-[16px] font-medium leading-[54px] text-[#243238] pop capitalize">{subcategory_name.replace(/-/g, " ")}</h3>
-                    <h4 className="text-[22px] max-sm:text-[20px] font-medium leading-[54px] text-[#243238] pop">${theme?.data?.price}</h4>
+                    <h4 className="text-[22px] max-sm:text-[20px] font-medium leading-[54px] text-[#243238] pop">
+                      {theme?.data?.is_free == true ? (
+                        "Free"
+                      ) : (
+
+                        `$${theme?.data?.price}`
+
+                      )}
+                    </h4>
 
                   </div>
                   <div className="mt-[16px] space-y-[10px]">
@@ -509,11 +517,17 @@ function HomePage() {
                       <path d="M12 14.8905C5.60584 14.8905 0.525548 8.23358 0.350365 7.9708L0 7.44526L0.350365 6.91971C0.525548 6.65693 5.60584 0 12 0C18.3942 0 23.4745 6.65693 23.6496 6.91971L24 7.44526L23.6496 7.9708C23.4745 8.23358 18.3942 14.8905 12 14.8905ZM2.18978 7.44526C3.50365 8.93431 7.44526 13.1387 12 13.1387C16.5547 13.1387 20.5839 8.93431 21.8102 7.44526C20.4964 5.9562 16.5547 1.75182 12 1.75182C7.44526 1.75182 3.41606 5.9562 2.18978 7.44526Z" fill="white" />
                       <path d="M11.9999 11.4745C9.81012 11.4745 7.9707 9.72265 7.9707 7.44527C7.9707 5.1679 9.72253 3.41608 11.9999 3.41608C14.2773 3.41608 16.0291 5.1679 16.0291 7.44527C16.0291 9.72265 14.1897 11.4745 11.9999 11.4745ZM11.9999 5.1679C10.7736 5.1679 9.72253 6.13141 9.72253 7.44527C9.72253 8.75914 10.686 9.72265 11.9999 9.72265C13.3138 9.72265 14.2773 8.75914 14.2773 7.44527C14.2773 6.13141 13.2262 5.1679 11.9999 5.1679Z" fill="white" />
                     </svg> Live Preview</button>
-                    <button onClick={handlecart} className="bg-[#82B440] max-sm:text-[16px] max-sm:h-[40px]  text-[18px] font-[600] flex items-center w-full justify-center rounded-[5px] overflow-hidden  text-white gap-[10px] h-[44px] shadow-[0px_3px_0px_0px_#6F9A36]"><svg xmlns="http://www.w3.org/2000/svg" className="max-sm:w-[20px]" width="29" height="26" viewBox="0 0 29 26" fill="none">
-                      <path d="M12.8008 25.4882C14.2085 25.4882 15.3496 24.3471 15.3496 22.9394C15.3496 21.5317 14.2085 20.3906 12.8008 20.3906C11.3931 20.3906 10.252 21.5317 10.252 22.9394C10.252 24.3471 11.3931 25.4882 12.8008 25.4882Z" fill="white" />
-                      <path d="M21.3535 25.4882C22.7612 25.4882 23.9023 24.3471 23.9023 22.9394C23.9023 21.5317 22.7612 20.3906 21.3535 20.3906C19.9458 20.3906 18.8047 21.5317 18.8047 22.9394C18.8047 24.3471 19.9458 25.4882 21.3535 25.4882Z" fill="white" />
-                      <path d="M0.849605 1.69927H4.39263L8.49441 16.0583L8.17269 16.7018C7.32558 18.3942 8.55529 20.3906 10.4527 20.3906H24.7518C25.2214 20.3906 25.6014 20.0106 25.6014 19.541C25.6014 19.0714 25.2214 18.6914 24.7518 18.6914H10.4527C9.82177 18.6914 9.40943 18.027 9.69269 17.4618L9.92752 16.9922H24.7518C24.9365 16.9921 25.1162 16.9319 25.2636 16.8207C25.4111 16.7095 25.5183 16.5533 25.5691 16.3757L28.9675 4.48121C29.0035 4.35476 29.0097 4.22169 28.9856 4.09243C28.9616 3.96318 28.908 3.84124 28.829 3.73617C28.7496 3.63134 28.647 3.5463 28.5292 3.48772C28.4115 3.42914 28.2818 3.39859 28.1503 3.39848H6.64521L5.85038 0.616473C5.79958 0.438903 5.69236 0.282699 5.54491 0.171477C5.39746 0.0602545 5.21781 6.20133e-05 5.03312 0H0.849605C0.38 0 0 0.38 0 0.849605C0 1.31921 0.38 1.69927 0.849605 1.69927Z" fill="white" />
-                    </svg>Add to Cart</button>
+                    {theme?.data?.is_free == true ? (
+
+                      <a onClick={handlecart} href={`${import.meta.env.VITE_API_BASE_URL}${theme?.data?.theme_file}`} download className="bg-[#82B440]  max-sm:text-[16px] max-sm:h-[40px]  text-[18px] font-[600] flex items-center w-full justify-center rounded-[5px] overflow-hidden  text-white gap-[10px] h-[44px] shadow-[0px_3px_0px_0px_#6F9A36]">Free Download</a>
+                    ) : (
+
+                      <button onClick={handlecart} className="bg-[#82B440] max-sm:text-[16px] max-sm:h-[40px]  text-[18px] font-[600] flex items-center w-full justify-center rounded-[5px] overflow-hidden  text-white gap-[10px] h-[44px] shadow-[0px_3px_0px_0px_#6F9A36]"><svg xmlns="http://www.w3.org/2000/svg" className="max-sm:w-[20px]" width="29" height="26" viewBox="0 0 29 26" fill="none">
+                        <path d="M12.8008 25.4882C14.2085 25.4882 15.3496 24.3471 15.3496 22.9394C15.3496 21.5317 14.2085 20.3906 12.8008 20.3906C11.3931 20.3906 10.252 21.5317 10.252 22.9394C10.252 24.3471 11.3931 25.4882 12.8008 25.4882Z" fill="white" />
+                        <path d="M21.3535 25.4882C22.7612 25.4882 23.9023 24.3471 23.9023 22.9394C23.9023 21.5317 22.7612 20.3906 21.3535 20.3906C19.9458 20.3906 18.8047 21.5317 18.8047 22.9394C18.8047 24.3471 19.9458 25.4882 21.3535 25.4882Z" fill="white" />
+                        <path d="M0.849605 1.69927H4.39263L8.49441 16.0583L8.17269 16.7018C7.32558 18.3942 8.55529 20.3906 10.4527 20.3906H24.7518C25.2214 20.3906 25.6014 20.0106 25.6014 19.541C25.6014 19.0714 25.2214 18.6914 24.7518 18.6914H10.4527C9.82177 18.6914 9.40943 18.027 9.69269 17.4618L9.92752 16.9922H24.7518C24.9365 16.9921 25.1162 16.9319 25.2636 16.8207C25.4111 16.7095 25.5183 16.5533 25.5691 16.3757L28.9675 4.48121C29.0035 4.35476 29.0097 4.22169 28.9856 4.09243C28.9616 3.96318 28.908 3.84124 28.829 3.73617C28.7496 3.63134 28.647 3.5463 28.5292 3.48772C28.4115 3.42914 28.2818 3.39859 28.1503 3.39848H6.64521L5.85038 0.616473C5.79958 0.438903 5.69236 0.282699 5.54491 0.171477C5.39746 0.0602545 5.21781 6.20133e-05 5.03312 0H0.849605C0.38 0 0 0.38 0 0.849605C0 1.31921 0.38 1.69927 0.849605 1.69927Z" fill="white" />
+                      </svg>Add to Cart</button>
+                    )}
                   </div>
 
 
@@ -524,10 +538,10 @@ function HomePage() {
                     <div className="w-[50%] pop font-medium text-[#545454] max-sm:text-sm">Last Update</div>
                     <div className="pop text-[#868686] max-sm:text-sm">{formatDate(theme?.data?.updated_at)}</div>
                   </div>
-                  <div className="flex items-center ">
+                  {/* <div className="flex items-center ">
                     <div className="w-[50%] pop font-medium text-[#545454] max-sm:text-sm">File Size</div>
                     <div className="pop text-[#868686] max-sm:text-sm">{fileSize} MB</div>
-                  </div>
+                  </div> */}
                   <div className="flex items-center ">
                     <div className="w-[50%] pop font-medium text-[#545454] max-sm:text-sm">High Resolution</div>
                     <div className="pop text-[#868686] max-sm:text-sm">Yes</div>

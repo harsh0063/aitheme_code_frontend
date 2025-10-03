@@ -78,6 +78,7 @@ export const api = createApi({
           is_best_seller,
           is_featured,
           is_sale,
+          is_free,
           is_new_arrival
         } = args || {}; // ✅ fallback to empty object
 
@@ -94,6 +95,7 @@ export const api = createApi({
         if (is_featured) params.append('is_featured', 'True');
         if (is_sale) params.append('is_sale', 'True');
         if (is_new_arrival) params.append('is_new_arrival', 'True');
+        if (is_free) params.append('is_free', 'True');
         if (fetch_all) params.append('fetch_all', 'True');
 
         return `view-themes/?${params.toString()}`;

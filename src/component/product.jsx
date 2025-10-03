@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from '../assets/product.jpg'
 import { useNavigate } from "react-router-dom";
-import { useAddWishlistMutation, useDeleteWishlistMutation, useGetCategoryQuery, useGetWhishlistQuery, useGetSubcategoryQuery } from "../service/apislice";
+import { useAddWishlistMutation, useDeleteWishlistMutation, useGetCategoryQuery, useGetWhishlistQuery, useGetSubcategoryQuery, useAddOrderMutation, useGetUserQuery } from "../service/apislice";
 import { toast, ToastContainer } from "react-toastify";
 import cate1 from '../assets/html.svg'
 import cate2 from '../assets/bootstrap.svg'
@@ -21,20 +21,20 @@ const categoryImages = {
     "wordpress": cate7,
 };
 
-function HomePage({ image, demo_url, sales_count, rating, category, discount_price, name, theme_id, subcategory, categoryName, subcategoryName,product_page,slug }) {
+function HomePage({ image, demo_url, sales_count, rating, category, discount_price, name, theme_id, is_free, theme_file, subcategory, categoryName, subcategoryName, product_page, slug }) {
     const navigate = useNavigate()
 
     const { data: cate } = useGetCategoryQuery({ fetch_all: 'all' })
     const { data: subcate } = useGetSubcategoryQuery({ fetch_all: 'all' })
     const [liked, setLiked] = useState(false);
 
-    
+
 
     const themename = slug;
     const [addWishlist] = useAddWishlistMutation()
 
-    if(product_page){
-        sessionStorage.setItem('product_page',product_page)
+    if (product_page) {
+        sessionStorage.setItem('product_page', product_page)
     }
 
     const handleaddwhishlist = async () => {
@@ -50,12 +50,12 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
             navigate('/wishlist')
 
         } catch (error) {
-            if(localStorage.getItem('aithemetoken')){
+            if (localStorage.getItem('aithemetoken')) {
                 toast.error(error?.message || error?.data?.message || 'Failed to add to cart', {
                     autoClose: 1000,
                 });
 
-            }else{
+            } else {
                 navigate('/login')
             }
         }
@@ -77,7 +77,7 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
         try {
 
             const id = whishlist?.data?.find((val) => val.theme_id === theme_id)?.wishlist_id
-         
+
 
 
             const formdata = new FormData()
@@ -94,11 +94,74 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
             });
         }
     }
+    const { data: user1 } = useGetUserQuery();
+    const user = user1?.data;
+    const [addorder] = useAddOrderMutation()
 
+    const handlesubmit = async () => {
+        try {
+            // 1. Prepare formData
+            const formData = new FormData();
+            formData.append("theme_id", theme_id);
+
+            // 2. Call backend to create Razorpay order
+            const res = await addorder(formData).unwrap();
+            const { razorpay_order_id, amount, currency } = res;
+
+
+
+
+            // 3. Razorpay payment config
+            const options = {
+                key: "rzp_live_9kPuonCRbdUuKp",
+                amount: amount * 100,
+                currency,
+                name: "AiThemeCode",
+                description: "Order Payment",
+                order_id: razorpay_order_id,
+                handler: async function (res) {
+                    const formData = new FormData();
+                    formData.append("razorpay_order_id", res.razorpay_order_id);
+                    formData.append("razorpay_payment_id", res.razorpay_payment_id);
+                    formData.append("razorpay_signature", res.razorpay_signature);
+
+                    // Pass formData to your verifyPayment function
+                    await verifyPayment(formData);
+                    navigate("/profile"); // Change this route as per your app
+                },
+                prefill: {
+                    name: user?.first_name + user?.last_name,
+                    email: user?.email,
+                    contact: user?.mobile_no,
+                },
+                method: {
+                    netbanking: true,
+                    card: true,
+                    upi: true,
+                    wallet: true,
+                    emi: true,
+                    paylater: true,
+                },
+                theme: {
+                    color: "#3399cc",
+                },
+            };
+
+
+            const razorpay = new window.Razorpay(options);
+            razorpay.open();
+
+        } catch (error) {
+            toast.error(error.data?.message || "Payment Faild", {
+                autoClose: 1000,
+            });
+            console.error("Payment Error:", error);
+        }
+    };
 
     return (
         <>
-           
+
             <div className=" rounded-[10px] overflow-hidden bg-white shadow-[0px_4px_10px_0px_#00000026]">
                 <div className="">
                     <img onClick={() => {
@@ -122,30 +185,37 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
                             {name}
                         </h4>
 
+                        {is_free == true ? (
+                            ""
+                        ) : (
+
+
+                            <div className="w-[24px] flex-shrink-0 ml-1 cursor-pointer" onClick={() => {
+                                if (!liked) {
+
+                                    handleaddwhishlist()
+                                } else {
+
+                                    handledeletwhishlist()
+                                }
+                                setLiked(!liked)
+                            }}>
+                                {liked ? (
+                                    // ✅ Filled Heart
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="cursor-pointer" width="15" height="14" viewBox="0 0 15 14" fill="#FF3B3B">
+                                        <path d="M10.4998 0C9.39113 0 8.32106 0.406769 7.49963 1.15133C6.67821 0.406769 5.60814 0 4.4995 0C3.62174 0 2.76318 0.256999 2.02954 0.738901C1.29589 1.2208 0.719194 1.90673 0.370448 2.71224C0.0217017 3.51774 -0.0838665 4.40765 0.0667419 5.27239C0.21735 6.13714 0.61756 6.93896 1.21809 7.57913L7.23712 13.3956C7.30757 13.4636 7.40178 13.5012 7.49963 13.5007C7.59619 13.5003 7.68888 13.4627 7.7584 13.3956L13.7924 7.56788C14.3899 6.92657 14.7871 6.12473 14.9353 5.26083C15.0834 4.39693 14.976 3.50857 14.6263 2.70484C14.2767 1.90111 13.6999 1.21699 12.9668 0.736487C12.2337 0.255987 11.3763 0 10.4998 0Z" />
+                                    </svg>
+                                ) : (
+                                    // 🤍 Outline Heart
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="cursor-pointer" width="15" height="14" viewBox="0 0 15 14" fill="none">
+                                        <path d="M10.4998 2.74759e-05C9.39113 -0.00386889 8.32106 0.406769 7.49963 1.15133C6.67821 0.406769 5.60814 -0.00386889 4.4995 2.74759e-05C3.62174 0.000167056 2.76318 0.256999 2.02954 0.738901C1.29589 1.2208 0.719194 1.90673 0.370448 2.71224C0.0217017 3.51774 -0.0838665 4.40765 0.0667419 5.27239C0.21735 6.13714 0.61756 6.93896 1.21809 7.57913L7.23712 13.3956C7.30757 13.4636 7.40178 13.5012 7.49963 13.5007C7.59619 13.5003 7.68888 13.4627 7.7584 13.3956L13.7924 7.56788C14.3899 6.92657 14.7871 6.12473 14.9353 5.26083C15.0834 4.39693 14.976 3.50857 14.6263 2.70484C14.2767 1.90111 13.6999 1.21699 12.9668 0.736487C12.2337 0.255987 11.3763 2.41482e-05 10.4998 2.74759e-05ZM13.2599 7.04285L7.49963 12.6044L1.75437 7.0541C1.11724 6.32159 0.78901 5.37053 0.838715 4.40097C0.88842 3.43141 1.31219 2.51891 2.02088 1.85539C2.72958 1.19186 3.66798 0.829031 4.63871 0.843201C5.60944 0.857371 6.53684 1.24744 7.22587 1.93137C7.26095 1.96884 7.30335 1.9987 7.35044 2.01912C7.39753 2.03954 7.44831 2.05008 7.49963 2.05008C7.55096 2.05008 7.60174 2.03954 7.64883 2.01912C7.69592 1.9987 7.73832 1.96884 7.7734 1.93137C8.122 1.55734 8.54411 1.25936 9.01326 1.05608C9.4824 0.852803 9.98848 0.748621 10.4998 0.750062C11.2289 0.749378 11.9424 0.961257 12.553 1.35977C13.1636 1.75829 13.6448 2.32615 13.9376 2.99387C14.2305 3.6616 14.3224 4.40021 14.202 5.11934C14.0816 5.83846 13.7543 6.5069 13.2599 7.04285Z" fill="#797979" />
+                                    </svg>
+                                )}
+
+                            </div>
+                        )}
+
                         {/* ✅ Icon stays fixed at right */}
-                        <div className="w-[24px] flex-shrink-0 ml-1 cursor-pointer" onClick={() => {
-                            if (!liked) {
-
-                                handleaddwhishlist()
-                            } else {
-
-                                handledeletwhishlist()
-                            }
-                            setLiked(!liked)
-                        }}>
-                            {liked ? (
-                                // ✅ Filled Heart
-                                <svg xmlns="http://www.w3.org/2000/svg" className="cursor-pointer" width="15" height="14" viewBox="0 0 15 14" fill="#FF3B3B">
-                                    <path d="M10.4998 0C9.39113 0 8.32106 0.406769 7.49963 1.15133C6.67821 0.406769 5.60814 0 4.4995 0C3.62174 0 2.76318 0.256999 2.02954 0.738901C1.29589 1.2208 0.719194 1.90673 0.370448 2.71224C0.0217017 3.51774 -0.0838665 4.40765 0.0667419 5.27239C0.21735 6.13714 0.61756 6.93896 1.21809 7.57913L7.23712 13.3956C7.30757 13.4636 7.40178 13.5012 7.49963 13.5007C7.59619 13.5003 7.68888 13.4627 7.7584 13.3956L13.7924 7.56788C14.3899 6.92657 14.7871 6.12473 14.9353 5.26083C15.0834 4.39693 14.976 3.50857 14.6263 2.70484C14.2767 1.90111 13.6999 1.21699 12.9668 0.736487C12.2337 0.255987 11.3763 0 10.4998 0Z" />
-                                </svg>
-                            ) : (
-                                // 🤍 Outline Heart
-                                <svg xmlns="http://www.w3.org/2000/svg" className="cursor-pointer" width="15" height="14" viewBox="0 0 15 14" fill="none">
-                                    <path d="M10.4998 2.74759e-05C9.39113 -0.00386889 8.32106 0.406769 7.49963 1.15133C6.67821 0.406769 5.60814 -0.00386889 4.4995 2.74759e-05C3.62174 0.000167056 2.76318 0.256999 2.02954 0.738901C1.29589 1.2208 0.719194 1.90673 0.370448 2.71224C0.0217017 3.51774 -0.0838665 4.40765 0.0667419 5.27239C0.21735 6.13714 0.61756 6.93896 1.21809 7.57913L7.23712 13.3956C7.30757 13.4636 7.40178 13.5012 7.49963 13.5007C7.59619 13.5003 7.68888 13.4627 7.7584 13.3956L13.7924 7.56788C14.3899 6.92657 14.7871 6.12473 14.9353 5.26083C15.0834 4.39693 14.976 3.50857 14.6263 2.70484C14.2767 1.90111 13.6999 1.21699 12.9668 0.736487C12.2337 0.255987 11.3763 2.41482e-05 10.4998 2.74759e-05ZM13.2599 7.04285L7.49963 12.6044L1.75437 7.0541C1.11724 6.32159 0.78901 5.37053 0.838715 4.40097C0.88842 3.43141 1.31219 2.51891 2.02088 1.85539C2.72958 1.19186 3.66798 0.829031 4.63871 0.843201C5.60944 0.857371 6.53684 1.24744 7.22587 1.93137C7.26095 1.96884 7.30335 1.9987 7.35044 2.01912C7.39753 2.03954 7.44831 2.05008 7.49963 2.05008C7.55096 2.05008 7.60174 2.03954 7.64883 2.01912C7.69592 1.9987 7.73832 1.96884 7.7734 1.93137C8.122 1.55734 8.54411 1.25936 9.01326 1.05608C9.4824 0.852803 9.98848 0.748621 10.4998 0.750062C11.2289 0.749378 11.9424 0.961257 12.553 1.35977C13.1636 1.75829 13.6448 2.32615 13.9376 2.99387C14.2305 3.6616 14.3224 4.40021 14.202 5.11934C14.0816 5.83846 13.7543 6.5069 13.2599 7.04285Z" fill="#797979" />
-                                </svg>
-                            )}
-
-                        </div>
                     </div>
                     <div className="py-[11px] pb-[16px] border-b border-[#D8D8D8] flex justify-between items-center">
                         <div className="flex items-center gap-[6px]">
@@ -158,7 +228,15 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
                             </div>
                         </div>
                         <div>
-                            <button className="h-[26px] py-0 px-[8px] font-normal bg-transparent shadow-[2.47px_2.47px_1.24px_0px_#00000040] rounded-[2px] text-[15px] pop  text-[#464646] border border-[#B4B2B2]">${discount_price}</button>
+                            <button className="h-[26px] py-0 px-[8px] font-normal bg-transparent shadow-[2.47px_2.47px_1.24px_0px_#00000040] rounded-[2px] text-[15px] pop  text-[#464646] border border-[#B4B2B2]">
+                                {is_free == true ? (
+                                    "Free"
+                                ) : (
+
+                                    `$${discount_price}`
+                                )}
+
+                            </button>
                         </div>
                     </div>
                     <div className="flex mt-[10px] mb-[15px] items-center justify-between">
@@ -177,7 +255,18 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
                     </div>
 
                     <button onClick={() => window.open(demo_url, "_blank")} className="h-[30px] cursor-pointer hover:border-[#538DF8] w-full py-0 text-sm font-[600] inter border border-[#538DF8] rounded-[3px] bg-transparent transition-all duration-150 hover:text-white hover:bg-[#538DF8] text-[#538DF8]">Live Demo</button>
-                    <button onClick={() => window.open(demo_url, "_blank")} className="h-[30px] shadow-[0px_1px_0px_0px_#6F9A36] cursor-pointer  mt-[10px] hover:border-[#82B440] pop w-full py-0 text-sm font-[500] inter border border-[#82B440] rounded-[3px] bg-[#82B440] transition-all duration-150   text-white">Buy Now</button>
+                    {is_free == true ? (
+                        <a
+                            href={`${import.meta.env.VITE_API_BASE_URL}${theme_file}`}
+                            download
+                            className="h-[30px] flex items-center justify-center shadow-[0px_1px_0px_0px_#6F9A36] cursor-pointer mt-[10px] hover:border-[#82B440] pop w-full py-0 text-sm font-[500] inter border border-[#82B440] rounded-[3px] bg-[#82B440] transition-all duration-150 text-white"
+                        >
+                            Free download
+                        </a>
+
+                    ) : (
+                        <button onClick={() => handlesubmit()} className="h-[30px] shadow-[0px_1px_0px_0px_#6F9A36] cursor-pointer  mt-[10px] hover:border-[#82B440] pop w-full py-0 text-sm font-[500] inter border border-[#82B440] rounded-[3px] bg-[#82B440] transition-all duration-150   text-white">Buy Now</button>
+                    )}
 
                 </div>
             </div>

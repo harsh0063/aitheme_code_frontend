@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Header from '../component/header'
 import Footer from '../component/footer'
 import { useAddOrderMutation, useAddWishlistMutation, useDeleteCartMutation, useGetCartQuery, useGetUserQuery } from '../service/apislice';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 const Cart = () => {
@@ -10,68 +11,75 @@ const Cart = () => {
     const [modal, setModal] = useState(null);
     const openModal = (modalId) => setModal(modalId);
     const closeModal = () => setModal(null);
-
+    const navigate = useNavigate()
     const { data: cart } = useGetCartQuery()
     const [addorder] = useAddOrderMutation()
+    // const handlesubmit = async () => {
+    //     try {
+    //         // 1. Prepare formData
+    //         const formData = new FormData();
+    //         formData.append("is_cart", true);
+
+    //         // 2. Call backend to create Razorpay order
+    //         const res = await addorder(formData).unwrap();
+    //         const { razorpay_order_id, amount, currency } = res;
+
+
+
+
+    //         // 3. Razorpay payment config
+    //         const options = {
+    //             key: "rzp_live_9kPuonCRbdUuKp",
+    //             amount: amount * 100,
+    //             currency,
+    //             name: "AiThemeCode",
+    //             description: "Order Payment",
+    //             order_id: razorpay_order_id,
+    //             handler: async function (res) {
+    //                 const formData = new FormData();
+    //                 formData.append("razorpay_order_id", res.razorpay_order_id);
+    //                 formData.append("razorpay_payment_id", res.razorpay_payment_id);
+    //                 formData.append("razorpay_signature", res.razorpay_signature);
+
+    //                 // Pass formData to your verifyPayment function
+    //                 await verifyPayment(formData);
+
+    //             },
+    //             prefill: {
+    //                 name: "John Doe",
+    //                 email: "john@example.com",
+    //                 contact: "9876543210",
+    //             },
+    //             method: {
+    //                 netbanking: true,
+    //                 card: true,
+    //                 upi: true,
+    //                 wallet: true,
+    //                 emi: true,
+    //                 paylater: true,
+    //             },
+    //             theme: {
+    //                 color: "#3399cc",
+    //             },
+    //         };
+
+
+    //         const razorpay = new window.Razorpay(options);
+    //         razorpay.open();
+
+    //     } catch (error) {
+    //          toast.error(error.data?.message || "Failed to Delete Cart", {
+    //             autoClose: 1000,
+    //         });
+    //         console.error("Payment Error:", error);
+    //     }
+    // };
     const handlesubmit = async () => {
-        try {
-            // 1. Prepare formData
-            const formData = new FormData();
-            formData.append("is_cart", true);
-
-            // 2. Call backend to create Razorpay order
-            const res = await addorder(formData).unwrap();
-            const { razorpay_order_id, amount, currency } = res;
-      
-
-
-
-            // 3. Razorpay payment config
-            const options = {
-                key: "rzp_live_9kPuonCRbdUuKp",
-                amount: amount * 100,
-                currency,
-                name: "AiThemeCode",
-                description: "Order Payment",
-                order_id: razorpay_order_id,
-                handler: async function (res) {
-                    const formData = new FormData();
-                    formData.append("razorpay_order_id", res.razorpay_order_id);
-                    formData.append("razorpay_payment_id", res.razorpay_payment_id);
-                    formData.append("razorpay_signature", res.razorpay_signature);
-
-                    // Pass formData to your verifyPayment function
-                    await verifyPayment(formData);
-
-                },
-                prefill: {
-                    name: "John Doe",
-                    email: "john@example.com",
-                    contact: "9876543210",
-                },
-                method: {
-                    netbanking: true,
-                    card: true,
-                    upi: true,
-                    wallet: true,
-                    emi: true,
-                    paylater: true,
-                },
-                theme: {
-                    color: "#3399cc",
-                },
-            };
-
-
-            const razorpay = new window.Razorpay(options);
-            razorpay.open();
-
-        } catch (error) {
-             toast.error(error.data?.message || "Failed to Delete Cart", {
-                autoClose: 1000,
-            });
-            console.error("Payment Error:", error);
-        }
+       if(cart?.data?.length <= 0 ){
+        toast.error('Cart is empty!')
+       }else{
+        navigate('/checkout_page')
+       }
     };
     const [Deletecart] = useDeleteCartMutation()
 
@@ -131,7 +139,7 @@ const Cart = () => {
 
     return (
         <>
-
+            <ToastContainer/>
             <Header />
             {/* <section className="mt-[70px]">
                 <div className="container">
@@ -394,10 +402,13 @@ const Cart = () => {
 
                                     <h2 className='text-center  text-[35px] inter font-bold'>${Number(cart?.total_price_sum || 0).toFixed(2)}</h2>
 
+                                    {cart?.data?.length > 0 && (
 
-                                    <button onClick={handlesubmit} className="w-full mt-[20px] bg-black font-medium text-white py-2 rounded ">
+                                        
+                                        <button onClick={handlesubmit} className="w-full mt-[20px] bg-black font-medium text-white py-2 rounded ">
                                         Checkout Now
                                     </button>
+                                    )}
 
                                     {/* <div className="mt-6">
                                     <div className="text-sm font-semibold mb-1">Promotions</div>

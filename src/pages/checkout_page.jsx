@@ -1,17 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from '../component/header'
 import Footer from '../component/footer'
 import banner from '../assets/banner-1.jpg'
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
-import { useGetScriptQuery } from "../service/apislice";
+import { useEditProfileMutation, useGetCartQuery, useGetScriptQuery, useGetUserQuery } from "../service/apislice";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // default styles
+import { useNavigate } from "react-router-dom";
 const ContactUs = () => {
 
-const [phone, setPhone] = useState("");
 
+    const { data: cart } = useGetCartQuery()
+    const { data: user1 } = useGetUserQuery();
+    const user = user1?.data;
+    const [formData, setFormData] = useState({
+        first_name: "",
+        last_name: "",
+        company_name: "",
+        email: "",
+        country: "",
+        address_line1: "",
+        address_line2: "",
+        city: "",
+        state: "",
+        ZIP: "",
+        GSTIN: ""
+    });
+    const [phone, setPhone] = useState("");
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                first_name: user.first_name || "",
+                last_name: user.last_name || "",
+                company_name: user.company_name || "",
+                email: user.email || "",
+                country: user.country || "",
+                address_line1: user.address_line1 || "",
+                address_line2: user.address_line2 || "",
+                city: user.city || "",
+                state: user.state || "",
+                ZIP: user.ZIP || "",
+                GSTIN: user.GSTIN || ""
+            });
 
+            setPhone(user.mobile_no || "");
+        }
+    }, [user]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+    const navigate = useNavigate(); // For redirecting
+    const [editProfile, { isLoading, isSuccess, isError }] = useEditProfileMutation();
+
+    const handleSubmit = async () => {
+        const form = new FormData();
+        for (let key in formData) {
+            form.append(key, formData[key]);
+        }
+
+        try {
+            const result = await editProfile(form).unwrap(); // unwrap for error handling
+            console.log("Profile updated successfully:", result);
+
+            // ✅ Redirect on success
+            navigate('/billing_details'); // Or use window.location.href = '/next-page'
+        } catch (err) {
+            console.error("Failed to update profile:", err);
+        }
+    };
 
     return (
 
@@ -45,74 +104,81 @@ const [phone, setPhone] = useState("");
                                 <div className="grid grid-cols-2 gap-[50px] max-sm:grid-cols-1 max-sm:gap-[20px]">
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">First Name</label>
-                                        <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="First  Name" />
+                                        <input onChange={handleInputChange} name="first_name" value={formData?.first_name || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="First  Name" />
                                     </div>
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Last Name</label>
-                                        <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="Last  Name" />
+                                        <input onChange={handleInputChange} name="last_name" value={formData?.last_name || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="Last  Name" />
                                     </div>
                                 </div>
                                 <div>
                                     <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Company Name</label>
-                                    <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="Company Name" />
+                                    <input onChange={handleInputChange} name="company_name" value={formData?.company_name || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="Company Name" />
                                 </div>
                                 <div className="grid grid-cols-2 gap-[50px] max-sm:grid-cols-1 max-sm:gap-[20px]">
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Your Email</label>
-                                        <input type="email" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="designer@example.com" />
+                                        <input onChange={handleInputChange} name="email" value={formData?.email || ""} type="email" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="designer@example.com" />
                                     </div>
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Your Phone Number</label>
                                         <PhoneInput
-        country={"us"} // default country
-        value={phone}
-        onChange={(value) => setPhone(value)}
-        inputProps={{
-          name: "phone",
-          required: true,
-        }}
-        inputClass="!w-full !h-[42px] !max-sm:h-[36px] !ps-[45px] !rounded-[6px] !text-[14px] !max-sm:text-[12px] !px-[15px] border border-[#D1D5DB] !text-[#B1B1B1]"
-        containerClass="w-full"
-      />
+                                            country={"us"} // default country
+                                            value={phone}
+                                            onChange={(value) => setPhone(value)}
+                                            inputProps={{
+                                                name: "phone",
+                                                required: true,
+                                            }}
+                                            inputClass="!w-full !h-[42px] !max-sm:h-[36px] !ps-[45px] !rounded-[6px] !text-[14px] !max-sm:text-[12px] !px-[15px] border border-[#D1D5DB] !placeholder-[#B1B1B1]"
+                                            containerClass="w-full"
+                                        />
                                     </div>
                                 </div>
                                 <div>
                                     <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Country</label>
-                                    <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="Country" />
+                                    <input onChange={handleInputChange} name="country" value={formData?.country || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="Country" />
                                 </div>
                                 <div>
                                     <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Address Line 1</label>
-                                    <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="Address Line 1" />
+                                    <input onChange={handleInputChange} name="address_line1" value={formData?.address_line1 || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="Address Line 1" />
                                 </div>
                                 <div>
                                     <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">Address Line 2</label>
-                                    <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="Address Line 2" />
+                                    <input onChange={handleInputChange} name="address_line2" value={formData?.address_line2 || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="Address Line 2" />
                                 </div>
                                 <div className="grid grid-cols-3 gap-[28px] max-sm:grid-cols-1 max-sm:gap-[20px]">
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">City</label>
-                                        <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="City" />
+                                        <input onChange={handleInputChange} name="city" value={formData?.city || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="City" />
                                     </div>
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">State / Province / Region</label>
-                                        <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="State" />
+                                        <input onChange={handleInputChange} name="state" value={formData?.state || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="State" />
                                     </div>
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">ZIP / Postal Code</label>
-                                        <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1]" placeholder="ZIP / Postal Code" />
+                                        <input onChange={handleInputChange} name="ZIP" value={formData?.ZIP || ""} type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1]" placeholder="ZIP / Postal Code" />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-3 gap-[28px] max-sm:grid-cols-1 max-sm:gap-[20px]">
                                     <div>
                                         <label className="robo block text-sm font-light leading-[20px] mb-[4px] max-sm:text-[12px]" htmlFor="">GSTIN</label>
-                                        <input type="text" className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB]  rounded-[6px] text-[14px] leading-[20px] text-[#B1B1B1] uppercase" placeholder="22AAAAA2222A0Z5" />
+                                        <input
+                                            value={formData?.GSTIN || ""}
+                                            type="text"
+                                            maxLength={15}
+                                            onChange={handleInputChange} name="GSTIN"
+                                            className="max-sm:h-[36px] max-sm:text-[12px] h-[42px] w-full px-[15px] border border-[#D1D5DB] rounded-[6px] text-[14px] leading-[20px] placeholder-[#B1B1B1] uppercase"
+                                            placeholder="22AAAAA2222A0Z5"
+                                        />
                                     </div>
 
                                 </div>
                             </div>
                             <div className="px-[30px] max-sm:p-0">
 
-                                <button className="leading-[54px] max-md:leading-[44px] max-sm:leading-[38px] max-sm:text-[16px]  w-full bg-[#82B440] shadow-[0px_3px_0px_0px_#6F9A36] text-[18px] pop font-[600] mt-[30px] text-white rounded-[3px]">Save & Continue</button>
+                                <button onClick={handleSubmit} className="leading-[54px] max-md:leading-[44px] max-sm:leading-[38px] max-sm:text-[16px]  w-full bg-[#82B440] shadow-[0px_3px_0px_0px_#6F9A36] text-[18px] pop font-[600] mt-[30px] text-white rounded-[3px]">Save & Continue</button>
                             </div>
                         </div>
                         <div className=" order-2 max-xl:order-1 max-xl:w-full">
@@ -120,24 +186,27 @@ const [phone, setPhone] = useState("");
                             <div className="border  w-[476px] max-sm:p-[20px] max-xl:w-full rounded-[10px] p-[20px_30px_5px_30px] border-[#D8D8D8]">
                                 <h2 className="text-[22px] pop font-medium leading-[54px] text-[#243238] max-sm:text-[20px] max-sm:leading-[40px]">Order Summary</h2>
                                 <div className="mt-[10px] border-t border-b border-[#D8D8D8]">
-                                    <div className="flex  gap-[16px] pt-[20px] pb-[30px]">
-                                        <div className="min-w-[117px] max-sm:h-[85px] max-w-[117px] h-[94px]">
-                                            <img
-                                                src={banner}
-                                                className="object-cover w-full h-full shadow-[2.15px_2.15px_2.87px_0px_#0000004D]"
-                                                alt=""
-                                            />
+                                    {cart?.data?.map((val, index) => (
+
+                                        <div key={index} className="flex  gap-[16px] pt-[20px] pb-[30px]">
+                                            <div className="min-w-[117px] max-sm:h-[85px] max-w-[117px] h-[94px]">
+                                                <img
+                                                    src={val?.theme_thumbnail}
+                                                    className="object-cover w-full h-full rounded-[4px] shadow-[2.15px_2.15px_2.87px_0px_#0000004D]"
+                                                    alt=""
+                                                />
+                                            </div>
+                                            <div>
+                                                <p className="pop text-[#243238] max-md:text-sm max-sm:text-[12px]">
+                                                    {val?.theme_name}
+                                                </p>
+                                                <span className="text-[17.44px] max-sm:text-[15px] leading-[42.8px] pop font-medium text-[#243238]">$ {val?.total_price}</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="pop text-[#243238] max-md:text-sm max-sm:text-[12px]">
-                                                Poket - Business And Multipurpose Responsive WordPress Theme
-                                            </p>
-                                            <span className="text-[17.44px] max-sm:text-[15px] leading-[42.8px] pop font-medium text-[#243238]">$ 52.00</span>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                                 <div className="text-right text-[18px] max-sm:text-[16px] max-sm:leading-normal pt-[10px] leading-[54px] text-[#363232]">
-                                    Total : <span className="font-medium">$52.00</span>
+                                    Total : <span className="font-medium">${cart?.total_price_sum}</span>
                                 </div>
                             </div>
                         </div>

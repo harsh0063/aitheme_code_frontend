@@ -359,6 +359,7 @@ function HomePage() {
                 theme_id={val?.theme_id}
                 image={val?.thumbnail}
                 key={val?.theme_id}
+                is_free={val?.is_free}
                 name={val?.name}
                 slug={val?.slug}
                 discount_price={val?.price}
@@ -411,6 +412,7 @@ function HomePage() {
                 key={val?.theme_id}
                 name={val?.name}
                 slug={val?.slug}
+                
                 discount_price={val?.price}
                 category={val?.category}
                 subcategory={val?.subcategory}

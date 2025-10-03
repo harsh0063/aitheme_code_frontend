@@ -84,7 +84,9 @@ function HomePage() {
                     <div className="flex max-sm:gap-[20px] gap-[30px]">
                         <ul className="flex gap-[20px] max-lg:hidden">
                              <li>
-                                <button className="h-[37px] max-xl:w-[120px] max-xl:text-[14px] max-xl:h-[30px] hover:bg-black hover:text-white transition-all duration-250 font-[400] py-0 w-[160px] rounded-[3px] bg-transparent border border-[#000000]">Free Downloads</button>
+                                <button onClick={() => {
+                                    navigate('/free_download')
+                                }} className="h-[37px] max-xl:w-[120px] max-xl:text-[14px] max-xl:h-[30px] hover:bg-black hover:text-white transition-all duration-250 font-[400] py-0 w-[160px] rounded-[3px] bg-transparent border border-[#000000]">Free Downloads</button>
                             </li>
                             {/* <li>
                                 <button className="w-[100px]  justify-center text-white py-0 h-[37px] flex rounded-[3px] gap-[12px] font-[300] items-center bg-[#F44336] " onClick={() => navigate('/sales')}>
@@ -213,7 +215,9 @@ function HomePage() {
                                         </Link>
                                     </li>
                                     <li className=" ">
- <button className="  text-[13px] font-[400] hover:bg-black hover:text-white transition-all duration-250 py-0 w-[120px] h-[30px] rounded-[3px] bg-transparent border border-[#000000]">Free Downloads</button>
+ <button className="  text-[13px] font-[400] hover:bg-black hover:text-white transition-all duration-250 py-0 w-[120px] h-[30px] rounded-[3px] bg-transparent border border-[#000000]" onClick={() => {
+                                    navigate('/free_download')
+                                }}>Free Downloads</button>
                                     </li>
                                     {/* <li className=" ">
                                         <button className="w-[130px] justify-center text-white py-0 h-[37px] flex rounded-[3px] gap-[12px] font-[300] items-center bg-[#F44336] " onClick={() => navigate('/sales')}>

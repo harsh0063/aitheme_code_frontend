@@ -206,8 +206,10 @@ function HomePage() {
                 name={val?.name}
                 key={val?.theme_id}
                 slug={val?.slug}
+                theme_file={val?.theme_file}
                 discount_price={val?.price}
                 category={val?.category}
+                is_free={val?.is_free}
                 categoryName={category?.data?.find(cat => cat.category_id === val.category)?.name.toLowerCase().replace(/\s+/g, '-')}
                 subcategoryName={subcategory?.data?.find(sub => sub.subcategory_id == val.subcategory)?.slug}
                 rating={val?.rating}
