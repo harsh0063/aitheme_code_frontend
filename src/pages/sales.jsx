@@ -196,7 +196,7 @@ function HomePage() {
 
       <section className="">
         <div className="container">
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {filteredTemplates?.map((val) => (
 

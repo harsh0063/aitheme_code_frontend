@@ -386,7 +386,7 @@ function HomePage() {
         <div className="container">
           <h2 className="pop mb-[20px] font-medium text-[25px] leading-[54px] text-[#243238]">Recent view product</h2>
 
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {themes?.data?.slice(0, 4)?.map((val) => (
 
@@ -436,7 +436,7 @@ function HomePage() {
             <p className="text-[17px] max-sm:text-sm sm:hidden text-[#243238] leading-[30px]">Limited-time deal on today’s top theme – available for 24 hours</p>
           </div>
 
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {themes_sales?.data?.slice(0, 4)?.map((val) => (
 
@@ -488,7 +488,7 @@ function HomePage() {
             <p className="text-[17px] max-sm:text-sm sm:hidden text-[#243238] leading-[30px]">The most popular website themes gaining traction right now – loved by designers and developers alike.</p>
           </div>
 
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {themes_trending?.data?.slice(0, 4)?.map((val) => (
 
@@ -538,7 +538,7 @@ function HomePage() {
             <p className="text-[17px] max-sm:text-sm sm:hidden text-[#243238] leading-[30px]">Top website templates with the highest sales volume and customer satisfaction.</p>
           </div>
 
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {themes_best_sellers?.data?.slice(0, 4)?.map((val) => (
 
@@ -589,7 +589,7 @@ function HomePage() {
             <p className="text-[17px] max-sm:text-sm sm:hidden text-[#243238] leading-[30px]">Top website templates with the highest sales volume and customer satisfaction.</p>
           </div>
 
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {themes_featured?.data?.slice(0, 4)?.map((val) => (
 
@@ -738,7 +738,7 @@ function HomePage() {
           </div>
 
 
-          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
+          <div className="grid grid-cols-4 max-2xl:gap-[48px_25px] max-[1640px]:gap-x-[40px] max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1   gap-x-[88px] gap-y-[50px]">
 
             {filteredTemplates?.map((val) => (
 
