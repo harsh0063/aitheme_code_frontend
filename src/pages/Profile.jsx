@@ -542,59 +542,56 @@ const profile = () => {
                                                     }
                                                 </tbody> */}
                                                 <tbody className="last_tr">
-                                                    {order?.data?.map((val) => (
-                                                        val?.order_items?.map((item) => (
-                                                            <tr
-                                                                key={`${val.order_id}-${item.id}`}
-                                                                className="h-[40px] sm:h-[58px] transition-all duration-200 bg-[#eef3f9cc] hover:bg-[#4646460c]"
-                                                            >
-                                                                <td className="ps-[30px] max-sm:text-[12px]  max-md:ps-[10px] max-sm:w-[40px]">
-                                                                    #{val.order_id}
-                                                                </td>
+                                                    {order?.data
+                                                        ?.filter((val) => val.status === "Success") // Only Success orders
+                                                        ?.map((val) =>
+                                                            val?.order_items?.map((item) => (
+                                                                <tr
+                                                                    key={`${val.order_id}-${item.id}`}
+                                                                    className="h-[40px] sm:h-[58px] transition-all duration-200 bg-[#eef3f9cc] hover:bg-[#4646460c]"
+                                                                >
+                                                                    <td className="ps-[30px] max-sm:text-[12px] max-md:ps-[10px] w-[40px]">
+                                                                        #{val.order_id}
+                                                                    </td>
 
-                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] px-[30px] text-center">
-                                                                    {item?.theme?.name?.length > 20
-                                                                        ? item.theme.name.slice(0, 20) + "..."
-                                                                        : item?.theme?.name}
-                                                                </td>
+                                                                    <td className="text-sm max-sm:text-[12px] text-[#5E5873] px-[30px] text-center">
+                                                                        {item?.theme?.name?.length > 25
+                                                                            ? item.theme.name.slice(0, 25) + "..."
+                                                                            : item?.theme?.name}
+                                                                    </td>
 
+                                                                    <td className="text-sm max-sm:text-[12px] text-[#5E5873] px-[30px] text-center">
+                                                                        {catego?.data?.find((cat) => cat.category_id == item?.theme?.category)?.name}
+                                                                    </td>
 
-                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] px-[30px] text-center">
-                                                                    {catego?.data?.find((val) => val.category_id == item?.theme?.category)?.name}
-                                                                </td>
+                                                                    <td className="text-sm max-sm:text-[12px] text-[#5E5873] px-[30px] text-center">
+                                                                        {item?.price}
+                                                                    </td>
 
-                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] px-[30px] text-center">
-                                                                    {item?.price}
-                                                                </td>
+                                                                    <td className="text-sm max-sm:text-[12px] text-[#5E5873] text-center">
+                                                                        {new Date(val.created_at).toLocaleString("en-US", {
+                                                                            month: "short",
+                                                                            day: "2-digit",
+                                                                            year: "numeric",
+                                                                        })}
+                                                                    </td>
 
-                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] text-center">
-                                                                    {new Date(val.created_at).toLocaleString("en-US", {
-                                                                        month: "short",
-                                                                        day: "2-digit",
-                                                                        year: "numeric",
-                                                                    })}
-                                                                </td>
-
-
-
-                                                                <td className="text-sm max-sm:text-[12px]  px-[50px] dropdown-container">
-                                                                    <div className='flex justify-center'>
-
-                                                                        <a
-                                                                            href={import.meta.env.VITE_API_BASE_URL + item?.theme?.theme_file}
-                                                                            download
-                                                                            className="mx-auto inline-block bg-[#83b541]  px-4 text-white py-[5px] rounded-md"
-                                                                        >
-
-                                                                         Download Zip
-                                                                        </a>
-
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        ))
-                                                    ))}
+                                                                    <td className="text-sm max-sm:text-[12px] px-[50px] dropdown-container">
+                                                                        <div className="flex justify-center">
+                                                                            <a
+                                                                                href={import.meta.env.VITE_API_BASE_URL + item?.theme?.theme_file}
+                                                                                download
+                                                                                className="mx-auto inline-block bg-[#83b541] px-4 text-white py-[5px] rounded-md"
+                                                                            >
+                                                                                Download Zip
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        )}
                                                 </tbody>
+
 
                                             </table>
 

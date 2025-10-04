@@ -223,6 +223,14 @@ export const api = createApi({
       providesTags: ['Order'],
     }),
 
+    addcontact: builder.mutation({
+      query: (formadata) => ({
+        url: 'add-contact/',  // your endpoint here
+        method: 'POST',
+        body: formadata,
+      }),
+      invalidatesTags: ['contact'], // re-fetch GET data after add
+    }),
   }),
 });
 
@@ -251,7 +259,8 @@ export const {
   useAddOrderMutation,
   useGetRatingQuery,
   useGetOrderQuery,
-
+  
+  useAddcontactMutation,
 
 
 } = api;

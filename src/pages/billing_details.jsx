@@ -170,7 +170,7 @@ const ContactUs = () => {
             </section>
 
             <section className="text-center text-[19px] max-sm:text-sm max-sm:py-[12px] pop text-[#303538] py-[17px] border-t border-[#C2C2C2]" >
-                Copyright © 2025 Creative Market, a Ai theme code. All rights reserved.
+              Copyright ©2025 AI Theme Code. All Rights Reserved. 
             </section>
 
 

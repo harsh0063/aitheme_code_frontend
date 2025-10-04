@@ -4,7 +4,7 @@ import Footer from '../component/footer'
 import Inject from '../component/inject'
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
-import { useGetScriptQuery } from "../service/apislice";
+import { useAddcontactMutation, useGetScriptQuery } from "../service/apislice";
 const ContactUs = () => {
 
     const [data, setData] = useState({
@@ -14,24 +14,44 @@ const ContactUs = () => {
         subject: "",
         message: ""
     })
+    const [addcontact] = useAddcontactMutation()
 
-    const handlesubmit = async () => {
-        try {
+   const handlesubmit = async () => {
+  // Check required fields
+  if (!data.firstName?.trim() || !data.lastName?.trim() || !data.email?.trim() || !data.subject?.trim()) {
+    toast.error("First name, last name, email, and subject are required", {
+      autoClose: 1500,
+    });
+    return; // Stop execution if validation fails
+  }
 
-            const formData = new FormData();
-            formData.append("first_name", data.firstName);
-            formData.append("last_name", data.lastName);
-            formData.append("email", data.email);
-            formData.append("subject", data.subject);
-            formData.append("message", data.message);
+  try {
+    const formData = new FormData();
+    formData.append("first_name", data.firstName);
+    formData.append("last_name", data.lastName);
+    formData.append("email", data.email);
+    formData.append("subject", data.subject);
+    formData.append("message", data.message || ""); // message can be optional
 
+    const res = await addcontact(formData).unwrap(); // Send FormData
 
-        } catch (error) {
-            toast.error(error?.message || error?.data?.message || "Something went wrong", {
-                autoClose: 1000,
-            });
-        }
-    }
+    toast.success(res?.message || res?.data?.message || "Message Successfully Delivered", {
+      autoClose: 1500,
+    });
+     // Clear all form fields after successful submit
+    setData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
+  } catch (error) {
+    toast.error(error?.message || error?.data?.message || "Something went wrong", {
+      autoClose: 1500,
+    });
+  }
+};
 
 
 

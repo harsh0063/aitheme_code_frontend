@@ -29,7 +29,7 @@ function HomePage() {
 
     const [isOpen, setIsOpen] = useState(false);
     return (
-        <section className="py-[29px] border-b-2 max-lg:py-[18px] max-sm:py-[12px]">
+        <section className="py-[29px] sticky top-0 w-full bg-white z-[500] border-b-2 max-lg:py-[18px] max-sm:py-[12px]">
             <div className="container">
                 <div className="flex items-center justify-between">
                     <div>
@@ -163,7 +163,7 @@ function HomePage() {
                             </svg>
                         </button>
                         <div
-                            className={`fixed top-0 left-0 z-50 w-[290px] h-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
+                            className={`fixed top-0 left-0 z-[999] w-[290px] h-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
                                 }`}
                         >
                             <div className="p-4 py-3 border-b flex justify-between items-center">
@@ -238,7 +238,7 @@ function HomePage() {
             {/* Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-40 z-40"
+                    className="fixed inset-0 bg-black bg-opacity-40 z-[994]"
                     onClick={() => setIsOpen(false)}
                 ></div>
             )}

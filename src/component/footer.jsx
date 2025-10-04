@@ -24,9 +24,9 @@ function HomePage() {
                             <p className="text-[18px] mt-[30px] max-sm:text-[16px] leading-[36px] text-[#243238]">Aithemecode is a marketplace where you can buy everything you need to create a website. Hundreds of independent developers sell their products here so that you could create your own unique project.</p>
 
                             <div className="flex mt-[35px] items-center gap-[20px]">
-                                <div>
+                                {/* <div>
                                     <img src={f1} alt="" />
-                                </div>
+                                </div> */}
                                 <div>
                                     <img src={f2} alt="" />
                                 </div>
@@ -39,9 +39,9 @@ function HomePage() {
                                 <div>
                                     <img src={f5} alt="" />
                                 </div>
-                                <div>
+                                {/* <div>
                                     <img src={f6} alt="" />
-                                </div>
+                                </div> */}
                             </div>
 
                         </div>
