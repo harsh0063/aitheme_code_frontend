@@ -213,3 +213,12 @@ thead th {
 .last_tr td {
   padding: 10px 20px;
 }
+
+@media(max-width : 769px){
+  .ssvvvs{
+    overflow-x: scroll !important;
+  }
+  .ssvvvs table{
+    width: 800px;
+  }
+}

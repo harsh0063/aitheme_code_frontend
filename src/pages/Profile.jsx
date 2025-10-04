@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Header from '../component/header'
 import Footer from '../component/footer'
-import { useEditProfileMutation, useGetOrderQuery, useGetUserQuery } from '../service/apislice';
+import { useEditProfileMutation, useGetCategoryQuery, useGetOrderQuery, useGetUserQuery } from '../service/apislice';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const profile = () => {
 
     const [active, setActive] = useState('oders')
-
+    const { data: catego } = useGetCategoryQuery()
     const [modal, setmodal] = useState("");
     const openModal = (modalId) => {
         setmodal(modalId);
@@ -455,29 +455,33 @@ const profile = () => {
 
                                 {activeTab1 == 'orders' && (
                                     <div className="border-[1px] border-[#CBD6E2] rounded-[15px] ">
-                                        <div className=" overflow-x-auto">
+                                        <div className=" overflow-x-auto ssvvvs">
                                             <table className="w-full ">
                                                 <thead className="">
                                                     <tr className="table-flex items-center h-[40px] sm:h-[54px]     ">
-                                                        <th className="text-start ps-[30px] py-[10px]  px-[30px] text-xs font-semibold text-[#5E5873] uppercase">
+                                                        <th className="text-start ps-[30px] py-[10px] max-sm:px-[20px]  px-[30px] text-xs font-semibold text-[#5E5873] uppercase">
                                                             Id
                                                         </th>
                                                         <th className=" text-xs font-semibold py-[10px] text-[#5E5873] uppercase text-center">
-                                                            Total Amount
+                                                            Name
+                                                        </th>
+                                                        <th className=" text-xs font-semibold py-[10px] text-[#5E5873] uppercase text-center">
+                                                            Category
+                                                        </th>
+                                                        <th className=" text-xs font-semibold py-[10px] text-[#5E5873] uppercase text-center">
+                                                            Amount
                                                         </th>
 
                                                         <th className=" text-xs font-semibold py-[10px] text-[#5E5873] uppercase text-center">
                                                             Date
                                                         </th>
+
                                                         <th className=" text-xs font-semibold py-[10px] text-[#5E5873] uppercase text-center">
-                                                            Status
-                                                        </th>
-                                                        <th className=" text-xs font-semibold py-[10px] text-[#5E5873] uppercase text-center">
-                                                            Action{" "}
+                                                            Download{" "}
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="last_tr">
+                                                {/* <tbody className="last_tr">
                                                     {
                                                         order?.data?.map((val) => (
 
@@ -536,7 +540,62 @@ const profile = () => {
                                                             </tr>
                                                         ))
                                                     }
+                                                </tbody> */}
+                                                <tbody className="last_tr">
+                                                    {order?.data?.map((val) => (
+                                                        val?.order_items?.map((item) => (
+                                                            <tr
+                                                                key={`${val.order_id}-${item.id}`}
+                                                                className="h-[40px] sm:h-[58px] transition-all duration-200 bg-[#eef3f9cc] hover:bg-[#4646460c]"
+                                                            >
+                                                                <td className="ps-[30px] max-sm:text-[12px]  max-md:ps-[10px] max-sm:w-[40px]">
+                                                                    #{val.order_id}
+                                                                </td>
+
+                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] px-[30px] text-center">
+                                                                    {item?.theme?.name?.length > 20
+                                                                        ? item.theme.name.slice(0, 20) + "..."
+                                                                        : item?.theme?.name}
+                                                                </td>
+
+
+                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] px-[30px] text-center">
+                                                                    {catego?.data?.find((val) => val.category_id == item?.theme?.category)?.name}
+                                                                </td>
+
+                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] px-[30px] text-center">
+                                                                    {item?.price}
+                                                                </td>
+
+                                                                <td className="text-sm max-sm:text-[12px]  text-[#5E5873] text-center">
+                                                                    {new Date(val.created_at).toLocaleString("en-US", {
+                                                                        month: "short",
+                                                                        day: "2-digit",
+                                                                        year: "numeric",
+                                                                    })}
+                                                                </td>
+
+
+
+                                                                <td className="text-sm max-sm:text-[12px]  px-[50px] dropdown-container">
+                                                                    <div className='flex justify-center'>
+
+                                                                        <a
+                                                                            href={import.meta.env.VITE_API_BASE_URL + item?.theme?.theme_file}
+                                                                            download
+                                                                            className="mx-auto inline-block bg-[#83b541]  px-4 text-white py-[5px] rounded-md"
+                                                                        >
+
+                                                                         Download Zip
+                                                                        </a>
+
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ))}
                                                 </tbody>
+
                                             </table>
 
                                         </div>
@@ -665,7 +724,7 @@ const profile = () => {
                         )
                     }
                 </div>
-            </section>
+            </section >
             <Footer />
         </>
     );

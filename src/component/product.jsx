@@ -100,6 +100,10 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
 
     const handlesubmit = async () => {
         try {
+            if (!localStorage.getItem('aithemetoken')) {
+                navigate('/login')
+                return
+            }
             // 1. Prepare formData
             const formData = new FormData();
             formData.append("theme_id", theme_id);
@@ -256,13 +260,25 @@ function HomePage({ image, demo_url, sales_count, rating, category, discount_pri
 
                     <button onClick={() => window.open(demo_url, "_blank")} className="h-[30px] cursor-pointer hover:border-[#538DF8] w-full py-0 text-sm font-[600] inter border border-[#538DF8] rounded-[3px] bg-transparent transition-all duration-150 hover:text-white hover:bg-[#538DF8] text-[#538DF8]">Live Demo</button>
                     {is_free == true ? (
-                        <a
-                            href={`${import.meta.env.VITE_API_BASE_URL}${theme_file}`}
-                            download
+                        <button
+                            onClick={() => {
+                                if (!localStorage.getItem("aithemetoken")) {
+                                    navigate("/login");
+                                    return;
+                                }
+
+                                // trigger file download
+                                const link = document.createElement("a");
+                                link.href = `${import.meta.env.VITE_API_BASE_URL}${theme_file}`;
+                                link.setAttribute("download", "theme.zip");
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }}
                             className="h-[30px] flex items-center justify-center shadow-[0px_1px_0px_0px_#6F9A36] cursor-pointer mt-[10px] hover:border-[#82B440] pop w-full py-0 text-sm font-[500] inter border border-[#82B440] rounded-[3px] bg-[#82B440] transition-all duration-150 text-white"
                         >
                             Free download
-                        </a>
+                        </button>
 
                     ) : (
                         <button onClick={() => handlesubmit()} className="h-[30px] shadow-[0px_1px_0px_0px_#6F9A36] cursor-pointer  mt-[10px] hover:border-[#82B440] pop w-full py-0 text-sm font-[500] inter border border-[#82B440] rounded-[3px] bg-[#82B440] transition-all duration-150   text-white">Buy Now</button>
